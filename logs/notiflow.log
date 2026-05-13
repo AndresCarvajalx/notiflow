@@ -1,0 +1,170 @@
+{"level":"info","time":"2026-05-13T12:38:18.079-0500","caller":"notiflow/main.go:22","msg":"Serial number: MP2HGDF3"}
+{"level":"info","time":"2026-05-13T12:38:18.469-0500","caller":"notiflow/main.go:32","msg":"License is active, starting application"}
+{"level":"info","time":"2026-05-13T12:38:18.473-0500","caller":"database/database.go:63","msg":"Successfully connected to database"}
+{"level":"info","time":"2026-05-13T12:38:18.474-0500","caller":"database/database.go:76","msg":"Database initialized successfully with default schema"}
+{"level":"info","time":"2026-05-13T12:38:18.475-0500","caller":"notifier/process.go:19","msg":"Leyendo Excel: C:/Users/andre/Downloads/clientes_prueba.xlsx"}
+{"level":"info","time":"2026-05-13T12:38:18.511-0500","caller":"notifier/process.go:24","msg":"Total clientes leidos: 15"}
+{"level":"info","time":"2026-05-13T12:38:18.542-0500","caller":"notifier/process.go:26","msg":"  DARKYS CASTRO VARGAS           | Tel: 3106100117 | Dias: 26"}
+{"level":"info","time":"2026-05-13T12:38:18.542-0500","caller":"notifier/process.go:26","msg":"  CARLOS MENDEZ PEREZ            | Tel: 3106100117 | Dias: 45"}
+{"level":"info","time":"2026-05-13T12:38:18.543-0500","caller":"notifier/process.go:26","msg":"  LUCIA TORRES GOMEZ             | Tel: 3106100117 | Dias: 5"}
+{"level":"info","time":"2026-05-13T12:38:18.543-0500","caller":"notifier/process.go:26","msg":"  JORGE IVAN RUIZ                | Tel: 3133066949 | Dias: 62"}
+{"level":"info","time":"2026-05-13T12:38:18.544-0500","caller":"notifier/process.go:26","msg":"  MARIA FERNANDA LOPEZ           | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:38:18.544-0500","caller":"notifier/process.go:26","msg":"  ANDRES FELIPE CASTRO           | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:38:18.544-0500","caller":"notifier/process.go:26","msg":"  SANDRA MILENA VARGAS           | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:38:18.545-0500","caller":"notifier/process.go:26","msg":"  ROBERTO CARLOS DIAZ            | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:38:18.546-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 1                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:38:18.546-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 2                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:38:18.546-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 3                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:38:18.546-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 4                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:38:18.546-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 5                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:38:18.547-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 6                      | Tel: 3106100117 | Dias: 64"}
+{"level":"info","time":"2026-05-13T12:38:18.547-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 7                      | Tel: 3106100117 | Dias: 64"}
+{"level":"info","time":"2026-05-13T12:38:18.547-0500","caller":"notifier/process.go:29","msg":"Filtrando clientes con mas de 30 dias vencidos..."}
+{"level":"info","time":"2026-05-13T12:38:18.551-0500","caller":"notifier/filter.go:28","msg":"A notificar: CARLOS MENDEZ PEREZ — 45 días corridos"}
+{"level":"info","time":"2026-05-13T12:38:18.551-0500","caller":"notifier/filter.go:28","msg":"A notificar: JORGE IVAN RUIZ — 62 días corridos"}
+{"level":"info","time":"2026-05-13T12:38:18.552-0500","caller":"notifier/filter.go:28","msg":"A notificar: CLIENTE 6 — 64 días corridos"}
+{"level":"info","time":"2026-05-13T12:38:18.554-0500","caller":"notifier/filter.go:28","msg":"A notificar: CLIENTE 7 — 64 días corridos"}
+{"level":"info","time":"2026-05-13T12:38:18.554-0500","caller":"notifier/process.go:34","msg":"Clientes a notificar: 4"}
+{"level":"info","time":"2026-05-13T12:38:19.394-0500","caller":"notifier/process.go:55","msg":"Enviado a CARLOS MENDEZ PEREZ (3106100117)"}
+{"level":"info","time":"2026-05-13T12:38:20.214-0500","caller":"notifier/process.go:55","msg":"Enviado a JORGE IVAN RUIZ (3133066949)"}
+{"level":"info","time":"2026-05-13T12:38:20.925-0500","caller":"notifier/process.go:55","msg":"Enviado a CLIENTE 6 (3106100117)"}
+{"level":"info","time":"2026-05-13T12:38:21.437-0500","caller":"notifier/process.go:55","msg":"Enviado a CLIENTE 7 (3106100117)"}
+{"level":"info","time":"2026-05-13T12:41:38.018-0500","caller":"notiflow/main.go:22","msg":"Serial number: MP2HGDF3"}
+{"level":"info","time":"2026-05-13T12:41:38.357-0500","caller":"notiflow/main.go:32","msg":"License is active, starting application"}
+{"level":"info","time":"2026-05-13T12:41:38.359-0500","caller":"database/database.go:63","msg":"Successfully connected to database"}
+{"level":"info","time":"2026-05-13T12:41:38.360-0500","caller":"database/database.go:76","msg":"Database initialized successfully with default schema"}
+{"level":"info","time":"2026-05-13T12:41:38.360-0500","caller":"notifier/process.go:19","msg":"Leyendo Excel: C:/Users/andre/Downloads/clientes_prueba.xlsx"}
+{"level":"info","time":"2026-05-13T12:41:38.397-0500","caller":"notifier/process.go:24","msg":"Total clientes leidos: 15"}
+{"level":"info","time":"2026-05-13T12:41:38.397-0500","caller":"notifier/process.go:26","msg":"  DARKYS CASTRO VARGAS           | Tel: 3106100117 | Dias: 26"}
+{"level":"info","time":"2026-05-13T12:41:38.397-0500","caller":"notifier/process.go:26","msg":"  CARLOS MENDEZ PEREZ            | Tel: 3106100117 | Dias: 45"}
+{"level":"info","time":"2026-05-13T12:41:38.397-0500","caller":"notifier/process.go:26","msg":"  LUCIA TORRES GOMEZ             | Tel: 3106100117 | Dias: 5"}
+{"level":"info","time":"2026-05-13T12:41:38.397-0500","caller":"notifier/process.go:26","msg":"  JORGE IVAN RUIZ                | Tel: 3133066949 | Dias: 62"}
+{"level":"info","time":"2026-05-13T12:41:38.397-0500","caller":"notifier/process.go:26","msg":"  MARIA FERNANDA LOPEZ           | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:41:38.397-0500","caller":"notifier/process.go:26","msg":"  ANDRES FELIPE CASTRO           | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:41:38.397-0500","caller":"notifier/process.go:26","msg":"  SANDRA MILENA VARGAS           | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:41:38.398-0500","caller":"notifier/process.go:26","msg":"  ROBERTO CARLOS DIAZ            | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:41:38.398-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 1                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:41:38.398-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 2                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:41:38.399-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 3                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:41:38.399-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 4                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:41:38.399-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 5                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:41:38.399-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 6                      | Tel: 3106100117 | Dias: 64"}
+{"level":"info","time":"2026-05-13T12:41:38.399-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 7                      | Tel: 3106100117 | Dias: 64"}
+{"level":"info","time":"2026-05-13T12:41:38.399-0500","caller":"notifier/process.go:29","msg":"Filtrando clientes con mas de 30 dias vencidos..."}
+{"level":"info","time":"2026-05-13T12:41:38.400-0500","caller":"notifier/filter.go:24","msg":"Omitido (ya notificado hoy): CARLOS MENDEZ PEREZ"}
+{"level":"info","time":"2026-05-13T12:41:38.400-0500","caller":"notifier/filter.go:24","msg":"Omitido (ya notificado hoy): JORGE IVAN RUIZ"}
+{"level":"info","time":"2026-05-13T12:41:38.401-0500","caller":"notifier/filter.go:24","msg":"Omitido (ya notificado hoy): CLIENTE 6"}
+{"level":"info","time":"2026-05-13T12:41:38.401-0500","caller":"notifier/filter.go:24","msg":"Omitido (ya notificado hoy): CLIENTE 7"}
+{"level":"info","time":"2026-05-13T12:41:38.402-0500","caller":"notifier/process.go:34","msg":"Clientes a notificar: 0"}
+{"level":"info","time":"2026-05-13T12:41:52.349-0500","caller":"notiflow/main.go:22","msg":"Serial number: MP2HGDF3"}
+{"level":"info","time":"2026-05-13T12:41:53.608-0500","caller":"notiflow/main.go:32","msg":"License is active, starting application"}
+{"level":"info","time":"2026-05-13T12:41:53.610-0500","caller":"database/database.go:63","msg":"Successfully connected to database"}
+{"level":"info","time":"2026-05-13T12:41:53.611-0500","caller":"database/database.go:76","msg":"Database initialized successfully with default schema"}
+{"level":"info","time":"2026-05-13T12:41:53.611-0500","caller":"notifier/process.go:19","msg":"Leyendo Excel: C:/Users/andre/Downloads/clientes_prueba.xlsx"}
+{"level":"info","time":"2026-05-13T12:41:53.638-0500","caller":"notifier/process.go:24","msg":"Total clientes leidos: 15"}
+{"level":"info","time":"2026-05-13T12:41:53.638-0500","caller":"notifier/process.go:26","msg":"  DARKYS CASTRO VARGAS           | Tel: 3106100117 | Dias: 26"}
+{"level":"info","time":"2026-05-13T12:41:53.638-0500","caller":"notifier/process.go:26","msg":"  CARLOS MENDEZ PEREZ            | Tel: 3106100117 | Dias: 45"}
+{"level":"info","time":"2026-05-13T12:41:53.639-0500","caller":"notifier/process.go:26","msg":"  LUCIA TORRES GOMEZ             | Tel: 3106100117 | Dias: 5"}
+{"level":"info","time":"2026-05-13T12:41:53.639-0500","caller":"notifier/process.go:26","msg":"  JORGE IVAN RUIZ                | Tel: 3133066949 | Dias: 62"}
+{"level":"info","time":"2026-05-13T12:41:53.639-0500","caller":"notifier/process.go:26","msg":"  MARIA FERNANDA LOPEZ           | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:41:53.639-0500","caller":"notifier/process.go:26","msg":"  ANDRES FELIPE CASTRO           | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:41:53.639-0500","caller":"notifier/process.go:26","msg":"  SANDRA MILENA VARGAS           | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:41:53.639-0500","caller":"notifier/process.go:26","msg":"  ROBERTO CARLOS DIAZ            | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:41:53.639-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 1                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:41:53.639-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 2                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:41:53.639-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 3                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:41:53.639-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 4                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:41:53.639-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 5                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:41:53.639-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 6                      | Tel: 3106100117 | Dias: 64"}
+{"level":"info","time":"2026-05-13T12:41:53.639-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 7                      | Tel: 3106100117 | Dias: 64"}
+{"level":"info","time":"2026-05-13T12:41:53.639-0500","caller":"notifier/process.go:29","msg":"Filtrando clientes con mas de 30 dias vencidos..."}
+{"level":"info","time":"2026-05-13T12:41:53.640-0500","caller":"notifier/filter.go:24","msg":"Omitido (ya notificado hoy): CARLOS MENDEZ PEREZ"}
+{"level":"info","time":"2026-05-13T12:41:53.640-0500","caller":"notifier/filter.go:24","msg":"Omitido (ya notificado hoy): JORGE IVAN RUIZ"}
+{"level":"info","time":"2026-05-13T12:41:53.640-0500","caller":"notifier/filter.go:24","msg":"Omitido (ya notificado hoy): CLIENTE 6"}
+{"level":"info","time":"2026-05-13T12:41:53.640-0500","caller":"notifier/filter.go:24","msg":"Omitido (ya notificado hoy): CLIENTE 7"}
+{"level":"info","time":"2026-05-13T12:41:53.641-0500","caller":"notifier/process.go:34","msg":"Clientes a notificar: 0"}
+{"level":"info","time":"2026-05-13T12:42:37.720-0500","caller":"notiflow/main.go:22","msg":"Serial number: MP2HGDF3"}
+{"level":"info","time":"2026-05-13T12:42:37.952-0500","caller":"notiflow/main.go:32","msg":"License is active, starting application"}
+{"level":"info","time":"2026-05-13T12:42:37.956-0500","caller":"database/database.go:63","msg":"Successfully connected to database"}
+{"level":"info","time":"2026-05-13T12:42:37.957-0500","caller":"database/database.go:76","msg":"Database initialized successfully with default schema"}
+{"level":"info","time":"2026-05-13T12:42:37.958-0500","caller":"notifier/process.go:19","msg":"Leyendo Excel: C:/Users/andre/Downloads/clientes_prueba.xlsx"}
+{"level":"info","time":"2026-05-13T12:42:37.995-0500","caller":"notifier/process.go:24","msg":"Total clientes leidos: 15"}
+{"level":"info","time":"2026-05-13T12:42:37.995-0500","caller":"notifier/process.go:26","msg":"  DARKYS CASTRO VARGAS           | Tel: 3106100117 | Dias: 26"}
+{"level":"info","time":"2026-05-13T12:42:37.996-0500","caller":"notifier/process.go:26","msg":"  CARLOS MENDEZ PEREZ            | Tel: 3106100117 | Dias: 45"}
+{"level":"info","time":"2026-05-13T12:42:37.996-0500","caller":"notifier/process.go:26","msg":"  LUCIA TORRES GOMEZ             | Tel: 3106100117 | Dias: 5"}
+{"level":"info","time":"2026-05-13T12:42:37.996-0500","caller":"notifier/process.go:26","msg":"  JORGE IVAN RUIZ                | Tel: 3133066949 | Dias: 62"}
+{"level":"info","time":"2026-05-13T12:42:37.996-0500","caller":"notifier/process.go:26","msg":"  MARIA FERNANDA LOPEZ           | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:42:37.996-0500","caller":"notifier/process.go:26","msg":"  ANDRES FELIPE CASTRO           | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:42:37.996-0500","caller":"notifier/process.go:26","msg":"  SANDRA MILENA VARGAS           | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:42:37.997-0500","caller":"notifier/process.go:26","msg":"  ROBERTO CARLOS DIAZ            | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:42:37.997-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 1                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:42:37.997-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 2                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:42:37.997-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 3                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:42:37.997-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 4                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:42:37.997-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 5                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:42:37.997-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 6                      | Tel: 3106100117 | Dias: 64"}
+{"level":"info","time":"2026-05-13T12:42:37.998-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 7                      | Tel: 3106100117 | Dias: 64"}
+{"level":"info","time":"2026-05-13T12:42:37.998-0500","caller":"notifier/process.go:29","msg":"Filtrando clientes con mas de 30 dias vencidos..."}
+{"level":"info","time":"2026-05-13T12:42:37.998-0500","caller":"notifier/filter.go:24","msg":"Omitido (ya notificado hoy): CARLOS MENDEZ PEREZ"}
+{"level":"info","time":"2026-05-13T12:42:37.999-0500","caller":"notifier/filter.go:24","msg":"Omitido (ya notificado hoy): JORGE IVAN RUIZ"}
+{"level":"info","time":"2026-05-13T12:42:37.999-0500","caller":"notifier/filter.go:24","msg":"Omitido (ya notificado hoy): CLIENTE 6"}
+{"level":"info","time":"2026-05-13T12:42:38.000-0500","caller":"notifier/filter.go:24","msg":"Omitido (ya notificado hoy): CLIENTE 7"}
+{"level":"info","time":"2026-05-13T12:42:38.000-0500","caller":"notifier/process.go:34","msg":"Clientes a notificar: 0"}
+{"level":"info","time":"2026-05-13T12:44:41.677-0500","caller":"notiflow/main.go:22","msg":"Serial number: MP2HGDF3"}
+{"level":"fatal","time":"2026-05-13T12:44:42.271-0500","caller":"notiflow/main.go:29","msg":"License is not active","stacktrace":"main.main\n\tC:/Users/andre/OneDrive/Documents/Programming/notiflow/main.go:29\nruntime.main\n\tC:/Users/andre/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.25.0.windows-amd64/src/runtime/proc.go:285"}
+{"level":"info","time":"2026-05-13T12:45:25.709-0500","caller":"notiflow/main.go:22","msg":"Serial number: MP2HGDF3"}
+{"level":"info","time":"2026-05-13T12:45:26.393-0500","caller":"notiflow/main.go:32","msg":"License is active, starting application"}
+{"level":"info","time":"2026-05-13T12:45:26.398-0500","caller":"database/database.go:63","msg":"Successfully connected to database"}
+{"level":"info","time":"2026-05-13T12:45:26.399-0500","caller":"database/database.go:76","msg":"Database initialized successfully with default schema"}
+{"level":"info","time":"2026-05-13T12:45:26.406-0500","caller":"notifier/process.go:19","msg":"Leyendo Excel: C:/Users/andre/Downloads/clientes_prueba.xlsx"}
+{"level":"info","time":"2026-05-13T12:45:26.447-0500","caller":"notifier/process.go:24","msg":"Total clientes leidos: 15"}
+{"level":"info","time":"2026-05-13T12:45:26.447-0500","caller":"notifier/process.go:26","msg":"  DARKYS CASTRO VARGAS           | Tel: 3106100117 | Dias: 26"}
+{"level":"info","time":"2026-05-13T12:45:26.447-0500","caller":"notifier/process.go:26","msg":"  CARLOS MENDEZ PEREZ            | Tel: 3106100117 | Dias: 45"}
+{"level":"info","time":"2026-05-13T12:45:26.448-0500","caller":"notifier/process.go:26","msg":"  LUCIA TORRES GOMEZ             | Tel: 3106100117 | Dias: 5"}
+{"level":"info","time":"2026-05-13T12:45:26.448-0500","caller":"notifier/process.go:26","msg":"  JORGE IVAN RUIZ                | Tel: 3133066949 | Dias: 62"}
+{"level":"info","time":"2026-05-13T12:45:26.448-0500","caller":"notifier/process.go:26","msg":"  MARIA FERNANDA LOPEZ           | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:45:26.448-0500","caller":"notifier/process.go:26","msg":"  ANDRES FELIPE CASTRO           | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:45:26.449-0500","caller":"notifier/process.go:26","msg":"  SANDRA MILENA VARGAS           | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:45:26.449-0500","caller":"notifier/process.go:26","msg":"  ROBERTO CARLOS DIAZ            | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:45:26.449-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 1                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:45:26.449-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 2                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:45:26.450-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 3                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:45:26.450-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 4                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:45:26.450-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 5                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T12:45:26.450-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 6                      | Tel: 3106100117 | Dias: 64"}
+{"level":"info","time":"2026-05-13T12:45:26.450-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 7                      | Tel: 3106100117 | Dias: 64"}
+{"level":"info","time":"2026-05-13T12:45:26.451-0500","caller":"notifier/process.go:29","msg":"Filtrando clientes con mas de 30 dias vencidos..."}
+{"level":"info","time":"2026-05-13T12:45:26.451-0500","caller":"notifier/filter.go:24","msg":"Omitido (ya notificado hoy): CARLOS MENDEZ PEREZ"}
+{"level":"info","time":"2026-05-13T12:45:26.452-0500","caller":"notifier/filter.go:24","msg":"Omitido (ya notificado hoy): JORGE IVAN RUIZ"}
+{"level":"info","time":"2026-05-13T12:45:26.452-0500","caller":"notifier/filter.go:24","msg":"Omitido (ya notificado hoy): CLIENTE 6"}
+{"level":"info","time":"2026-05-13T12:45:26.452-0500","caller":"notifier/filter.go:24","msg":"Omitido (ya notificado hoy): CLIENTE 7"}
+{"level":"info","time":"2026-05-13T12:45:26.452-0500","caller":"notifier/process.go:34","msg":"Clientes a notificar: 0"}
+{"level":"info","time":"2026-05-13T13:47:37.853-0500","caller":"notiflow/main.go:24","msg":"Serial number: MP2HGDF3"}
+{"level":"fatal","time":"2026-05-13T13:47:38.426-0500","caller":"notiflow/main.go:28","msg":"Error validating license: error consultando licencia: 401","stacktrace":"main.main\n\tC:/Users/andre/OneDrive/Documents/Programming/notiflow/main.go:28\nruntime.main\n\tC:/Users/andre/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.25.0.windows-amd64/src/runtime/proc.go:285"}
+{"level":"info","time":"2026-05-13T13:48:30.656-0500","caller":"notiflow/main.go:24","msg":"Serial number: MP2HGDF3"}
+{"level":"info","time":"2026-05-13T13:48:31.241-0500","caller":"notiflow/main.go:34","msg":"License is active, starting application"}
+{"level":"info","time":"2026-05-13T13:48:31.245-0500","caller":"database/database.go:63","msg":"Successfully connected to database"}
+{"level":"info","time":"2026-05-13T13:48:31.246-0500","caller":"database/database.go:76","msg":"Database initialized successfully with default schema"}
+{"level":"info","time":"2026-05-13T13:48:31.248-0500","caller":"notifier/process.go:19","msg":"Leyendo Excel: C:/Users/andre/Downloads/clientes_prueba.xlsx"}
+{"level":"info","time":"2026-05-13T13:48:31.332-0500","caller":"notifier/process.go:24","msg":"Total clientes leidos: 15"}
+{"level":"info","time":"2026-05-13T13:48:31.332-0500","caller":"notifier/process.go:26","msg":"  DARKYS CASTRO VARGAS           | Tel: 3106100117 | Dias: 26"}
+{"level":"info","time":"2026-05-13T13:48:31.332-0500","caller":"notifier/process.go:26","msg":"  CARLOS MENDEZ PEREZ            | Tel: 3106100117 | Dias: 45"}
+{"level":"info","time":"2026-05-13T13:48:31.332-0500","caller":"notifier/process.go:26","msg":"  LUCIA TORRES GOMEZ             | Tel: 3106100117 | Dias: 5"}
+{"level":"info","time":"2026-05-13T13:48:31.332-0500","caller":"notifier/process.go:26","msg":"  JORGE IVAN RUIZ                | Tel: 3133066949 | Dias: 62"}
+{"level":"info","time":"2026-05-13T13:48:31.332-0500","caller":"notifier/process.go:26","msg":"  MARIA FERNANDA LOPEZ           | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T13:48:31.332-0500","caller":"notifier/process.go:26","msg":"  ANDRES FELIPE CASTRO           | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T13:48:31.332-0500","caller":"notifier/process.go:26","msg":"  SANDRA MILENA VARGAS           | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T13:48:31.332-0500","caller":"notifier/process.go:26","msg":"  ROBERTO CARLOS DIAZ            | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T13:48:31.333-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 1                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T13:48:31.333-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 2                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T13:48:31.333-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 3                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T13:48:31.333-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 4                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T13:48:31.333-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 5                      | Tel: 3106100117 | Dias: 0"}
+{"level":"info","time":"2026-05-13T13:48:31.333-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 6                      | Tel: 3106100117 | Dias: 64"}
+{"level":"info","time":"2026-05-13T13:48:31.333-0500","caller":"notifier/process.go:26","msg":"  CLIENTE 7                      | Tel: 3106100117 | Dias: 64"}
+{"level":"info","time":"2026-05-13T13:48:31.333-0500","caller":"notifier/process.go:29","msg":"Filtrando clientes con mas de 30 dias vencidos..."}
+{"level":"info","time":"2026-05-13T13:48:31.334-0500","caller":"notifier/filter.go:24","msg":"Omitido (ya notificado hoy): CARLOS MENDEZ PEREZ"}
+{"level":"info","time":"2026-05-13T13:48:31.334-0500","caller":"notifier/filter.go:24","msg":"Omitido (ya notificado hoy): JORGE IVAN RUIZ"}
+{"level":"info","time":"2026-05-13T13:48:31.334-0500","caller":"notifier/filter.go:24","msg":"Omitido (ya notificado hoy): CLIENTE 6"}
+{"level":"info","time":"2026-05-13T13:48:31.334-0500","caller":"notifier/filter.go:24","msg":"Omitido (ya notificado hoy): CLIENTE 7"}
+{"level":"info","time":"2026-05-13T13:48:31.334-0500","caller":"notifier/process.go:34","msg":"Clientes a notificar: 0"}

@@ -1,0 +1,29 @@
+excel:
+  path: "C:/Users/andre/Downloads/clientes_prueba.xlsx"
+
+columnas:
+  tipo_transaccion: "TIPO TRANSACCION"
+  cliente: "CLIENTE"
+  placa: "PLACA"
+  valor_actual: "VALOR ACTUAL"
+  porcentaje_interes: "% INTERES"
+  valor_interes_mensual: "VALOR INTERES MENSUAL"
+  vencimiento_interes: "VENCIMIENTO DEL INTERES"
+  dias_corridos: "DIAS CORRIDOS"
+  valor_interes_vencido: "VALOR TOTAL INTERES VENCIDO A HOY"
+  saldo_actual: "SALDO ACTUAL"
+  telefono: "TELEFONO"
+
+whatsapp:
+  token: "EAANfB26PNGQBRXfESQTFzLDGSpdgS00aZAPSZCDPSZCsxOiuQnBURCXav3mZBZA6yBZC0hmo0SZCBomsA7oOwwpxWKgaulZByS0vNcZB7XFVxnkXM09ZA4z0OF3y7MyyVyVa1A6eCcrur3uI3AdoCF6PvogXgGLPP1GODmxRlwFv7ZAwgZA66JQOhBkQSO4LFrZCBErWWdlzsvaAHBQC57SJCXZBZCeBk237kpk8IEpnRns0P4ERKYjsYaTcPCRPEogm7BNwql05AXix5k8lcaTQGZCMeeJZAZCFMr"
+  phone_id: "1077709502094473"
+  codigo_pais: "57"
+
+mensaje: "Hola {nombre}, le informamos que su compromiso ({descripcion}) tiene {dias_vencidos} días vencidos. Saldo actual: ${saldo}. Por favor comuníquese con nosotros."
+
+scheduler:
+  hora: "08:00"
+  dias_vencimiento: 30
+
+server:
+  port: 5000
