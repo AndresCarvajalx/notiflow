@@ -12,8 +12,8 @@ import (
 
 func ValidateLicense(serialNumber string) (bool, error) {
 	token := os.Getenv("LICENSE_TOKEN")
-
-	req, err := http.NewRequest("GET", "https://api.github.com/repos/AndresCarvajalx/notiflow-license/contents/data.json", nil)
+	const URL = "https://api.github.com/repos/AndresCarvajalx/notiflow-license/contents/data.json"
+	req, err := http.NewRequest("GET", URL, nil)
 	if err != nil {
 		return false, err
 
@@ -47,7 +47,11 @@ func ValidateLicense(serialNumber string) (bool, error) {
 
 	for _, l := range data.Licenses {
 		if l.Client == serialNumber && l.Active {
-			expiration, _ := time.Parse("2006-01-02", l.Expiration)
+			expiration, err := time.Parse("2006-01-02", l.Expiration)
+			if err != nil {
+				return false, err
+			}
+			expiration = expiration.Add(24 * time.Hour)
 			return time.Now().Before(expiration), nil
 		}
 	}
@@ -61,9 +65,16 @@ func GetWindowSerialNumber() (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	lines := strings.Split(string(output), "\n")
-	if len(lines) > 1 {
-		return strings.TrimSpace(lines[1]), nil
+
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+
+		if line != "" && line != "SerialNumber" {
+			return line, nil
+		}
 	}
+
 	return "", fmt.Errorf("serial not found")
 }
