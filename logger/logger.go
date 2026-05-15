@@ -5,23 +5,44 @@ import (
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 var L *zap.Logger
 
 func Init() {
-	os.Mkdir("logs", os.ModePerm)
+	encoderConfig := zap.NewProductionEncoderConfig()
+	encoderConfig.TimeKey = "time"
+	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 
-	config := zap.NewProductionConfig()
-	config.OutputPaths = []string{"logs/notiflow.log", "stdout"}
-	config.EncoderConfig.TimeKey = "time"
-	config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	encoder := zapcore.NewJSONEncoder(encoderConfig)
 
-	logger, err := config.Build()
+	fileWriter := zapcore.AddSync(&lumberjack.Logger{
+		Filename:   "./logs/notiflow.log",
+		MaxSize:    10,
+		MaxBackups: 30,
+		MaxAge:     30,
+		Compress:   true,
+	})
 
-	if err != nil {
-		panic(err)
-	}
+	consoleWriter := zapcore.AddSync(os.Stdout)
 
-	L = logger
+	fileCore := zapcore.NewCore(
+		encoder,
+		fileWriter,
+		zap.InfoLevel,
+	)
+
+	consoleCore := zapcore.NewCore(
+		encoder,
+		consoleWriter,
+		zap.InfoLevel,
+	)
+
+	core := zapcore.NewTee(
+		fileCore,
+		consoleCore,
+	)
+
+	L = zap.New(core, zap.AddCaller())
 }
