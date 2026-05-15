@@ -7,6 +7,7 @@ import (
 
 	"github.com/AndresCarvajalx/notiflow/logger"
 	"github.com/AndresCarvajalx/notiflow/model"
+	"github.com/AndresCarvajalx/notiflow/utils"
 
 	"github.com/go-resty/resty/v2"
 )
@@ -70,7 +71,8 @@ func Send(token, phoneID, codigoPais string, cl model.Client) error {
 	}
 
 	if resp.StatusCode() >= 300 {
-		logger.L.Sugar().Errorf("whatsapp API error %d: %s", resp.StatusCode(), resp.String())
+		utils.ShowDialog("Error con API de whatsapp", resp.Status()+" "+resp.String())
+		logger.L.Sugar().Fatalf("whatsapp API error %d: %s", resp.StatusCode(), resp.String())
 		return fmt.Errorf("whatsapp API error %d: %s", resp.StatusCode(), resp.String())
 	}
 
