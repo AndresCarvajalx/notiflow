@@ -1,6 +1,7 @@
 package excel
 
 import (
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -47,11 +48,21 @@ func ReadClients(path string) ([]model.Client, error) {
 		return nil, nil
 	}
 
-	colIdx := buildColumnIndex(rows[0])
+	cfg := config.Get()
+	headerRow := cfg.Excel.HeaderRow
+	if headerRow == 0 {
+		headerRow = 1
+	}
+	headerIdx := headerRow - 1
 
-	cols := config.Get().Columnas
+	if len(rows) <= headerIdx {
+		return nil, fmt.Errorf("el archivo no tiene suficientes filas para el header en fila %d", headerRow)
+	}
 
-	// Resolver índice de cada campo — -1 si la columna no existe en el Excel
+	colIdx := buildColumnIndex(rows[headerIdx])
+
+	cols := cfg.Columnas
+
 	idxTipo := resolve(colIdx, cols.TipoTransaccion)
 	idxCliente := resolve(colIdx, cols.Cliente)
 	idxPlaca := resolve(colIdx, cols.Placa)
@@ -67,7 +78,7 @@ func ReadClients(path string) ([]model.Client, error) {
 	var clients []model.Client
 
 	for i, row := range rows {
-		if i == 0 {
+		if i <= headerIdx {
 			continue
 		}
 
