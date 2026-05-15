@@ -6,37 +6,43 @@ import (
 	"github.com/AndresCarvajalx/notiflow/license"
 	"github.com/AndresCarvajalx/notiflow/logger"
 	"github.com/AndresCarvajalx/notiflow/notifier"
+	"github.com/AndresCarvajalx/notiflow/utils"
 	"github.com/joho/godotenv"
 )
 
 func main() {
 	godotenv.Load()
+
 	logger.Init()
-	_, err := config.LoadConfig("config.yml")
+
+	serial, err := license.GetWindowSerialNumber()
 	if err != nil {
-		logger.L.Sugar().Fatalf("Error loading config: %v", err.Error())
+		utils.ShowDialog("Error obteniendo serial", "Ocurrio un error obteniendo el serial, error: "+err.Error())
+		logger.L.Sugar().Fatal(err.Error())
 	}
 
-	serialNumber, err := license.GetWindowSerialNumber()
-	if err != nil {
-		logger.L.Sugar().Fatalf("Error getting window serial number: %v", err.Error())
-	}
-	logger.L.Sugar().Infof("Serial number: %s", serialNumber)
+	logger.L.Sugar().Infof("Numero de serial:%s", serial)
 
-	active, err := license.ValidateLicense(serialNumber)
+	active, err := license.ValidateLicense(serial)
 	if err != nil {
-		logger.L.Sugar().Fatalf("Error validating license: %v", err.Error())
+		utils.ShowDialog("Error validando licencia", err.Error())
 	}
+
 	if !active {
-		logger.L.Sugar().Fatalf("License is not active")
+		utils.ShowDialog("Licencia Invalida", "Su licencia expiro, por favor pongase en contacto para renovarla")
+		return
 	}
-
-	logger.L.Sugar().Infof("License is active, starting application")
 
 	db := database.GetConnection()
 	database.Init(db)
 	defer db.Close()
 	defer logger.L.Sync()
+
+	_, err = config.LoadConfig("config.yml")
+	if err != nil {
+		utils.ShowDialog("Error leyendo el archivo config.yml", "El archivo de configuracion no se pudo leer o no existe")
+		logger.L.Sugar().Fatalf("Error loading config: %v", err.Error())
+	}
 
 	if err := notifier.Run(); err != nil {
 		logger.L.Sugar().Fatalf("Error running notifier: %v", err.Error())
