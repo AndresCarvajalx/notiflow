@@ -1,5 +1,6 @@
 excel:
   path: "C:/Users/andre/Downloads/clientes_prueba.xlsx"
+  header_row: 1
 
 columnas:
   tipo_transaccion: "TIPO TRANSACCION"
@@ -15,15 +16,9 @@ columnas:
   telefono: "TELEFONO"
 
 whatsapp:
-  token: "EAANfB26PNGQBRXfESQTFzLDGSpdgS00aZAPSZCDPSZCsxOiuQnBURCXav3mZBZA6yBZC0hmo0SZCBomsA7oOwwpxWKgaulZByS0vNcZB7XFVxnkXM09ZA4z0OF3y7MyyVyVa1A6eCcrur3uI3AdoCF6PvogXgGLPP1GODmxRlwFv7ZAwgZA66JQOhBkQSO4LFrZCBErWWdlzsvaAHBQC57SJCXZBZCeBk237kpk8IEpnRns0P4ERKYjsYaTcPCRPEogm7BNwql05AXix5k8lcaTQGZCMeeJZAZCFMr"
+  token: "EAANfB26PNGQBRTxQYMslKHZAUzwZAxZAYbdMcpiY7ODWaLscMHWkxTXZCPVYSPuYR0RcZBVXv22t1CSJ2EY3bvzojdlHqnWZClpM5ddRtf1OBeEzLRw5OFlHDRs7fIZABFWICGicbeikW8n630BSZCsGcXRq6ho6DIrXVnqXvZBRdqhtlfNw8mtNotZA4IrkR2ZBZBijAJjPuqtkb0f9Mwe7JELI5ORDZBvAbPTL9MZAFWglqtxvmQ1tNnEODPDXgvvbKpKv31A5TSRZAR50qxQj9em9f2X3wPK"
   phone_id: "1077709502094473"
   codigo_pais: "57"
 
-mensaje: "Hola {nombre}, le informamos que su compromiso ({descripcion}) tiene {dias_vencidos} días vencidos. Saldo actual: ${saldo}. Por favor comuníquese con nosotros."
-
 scheduler:
-  hora: "08:00"
   dias_vencimiento: 30
-
-server:
-  port: 5000
