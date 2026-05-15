@@ -1,16 +1,18 @@
 package config
 
 import (
+	"os"
+
 	"github.com/AndresCarvajalx/notiflow/logger"
 	"gopkg.in/yaml.v3"
-	"os"
 )
 
 var cfg *Config
 
 type Config struct {
 	Excel struct {
-		Path string `yaml:"path"`
+		Path      string `yaml:"path"`
+		HeaderRow int    `yaml:"header_row"`
 	} `yaml:"excel"`
 
 	Columnas struct {
@@ -33,16 +35,9 @@ type Config struct {
 		CodigoPais string `yaml:"codigo_pais"`
 	} `yaml:"whatsapp"`
 
-	Mensaje string `yaml:"mensaje"`
-
 	Scheduler struct {
-		Hora            string `yaml:"hora"`
-		DiasVencimiento int    `yaml:"dias_vencimiento"`
+		DiasVencimiento int `yaml:"dias_vencimiento"`
 	} `yaml:"scheduler"`
-
-	Server struct {
-		Port int `yaml:"port"`
-	} `yaml:"server"`
 }
 
 func LoadConfig(path string) (*Config, error) {
