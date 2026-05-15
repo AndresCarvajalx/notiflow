@@ -1,15 +1,11 @@
 package notifier
 
 import (
-	"fmt"
-	"strings"
-
 	"github.com/AndresCarvajalx/notiflow/logger"
 
 	"github.com/AndresCarvajalx/notiflow/config"
 	"github.com/AndresCarvajalx/notiflow/database"
 	"github.com/AndresCarvajalx/notiflow/excel"
-	"github.com/AndresCarvajalx/notiflow/model"
 	"github.com/AndresCarvajalx/notiflow/whatsapp"
 )
 
@@ -34,7 +30,7 @@ func Run() error {
 	logger.L.Sugar().Infof("Clientes a notificar: %d", len(filtered))
 
 	for _, client := range filtered {
-		message := buildMessage(cfg.Mensaje, client)
+		message := "Hola, buen día. Te escribimos para recordar que actualmente tienes una mora pendiente de *{{2}}* dias con nosotros referente a la placa *{{1}}* Agradecemos realizar el pago lo antes posible para evitar reportes negativos o posibles inconvenientes jurídicos derivados del incumplimiento. Si ya realizaste el pago, por favor envíanos el soporte para actualizar el estado de tu cuenta. Quedamos atentos. Gracias."
 
 		err := whatsapp.Send(
 			cfg.Whatsapp.Token,
@@ -68,23 +64,4 @@ func Run() error {
 	}
 
 	return nil
-}
-
-func buildMessage(plantilla string, c model.Client) string {
-	if plantilla == "" {
-		plantilla = "Hola {nombre}, su compromiso ({descripcion}) tiene {dias_vencidos} días vencidos. Saldo: ${saldo:,.0f}. Comuníquese con nosotros."
-	}
-
-	r := strings.NewReplacer(
-		"{nombre}", c.Name,
-		"{descripcion}", c.TipoTransaccion,
-		"{dias_vencidos}", fmt.Sprintf("%d", c.DaysOverdue),
-		"{valor}", fmt.Sprintf("%.0f", c.Value),
-		"{saldo}", fmt.Sprintf("%.0f", c.SaldoActual),
-		"{vencimiento}", c.VencimientoInteres,
-		"{placa}", c.Placa,
-		"{interes}", fmt.Sprintf("%.0f", c.ValorInteresMensual),
-	)
-
-	return r.Replace(plantilla)
 }
