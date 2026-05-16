@@ -38,6 +38,10 @@ type Config struct {
 	Scheduler struct {
 		DiasVencimiento int `yaml:"dias_vencimiento"`
 	} `yaml:"scheduler"`
+
+	Server struct {
+		Port string `yaml:"port" `
+	} `yaml:"server" `
 }
 
 func LoadConfig(path string) (*Config, error) {
