@@ -22,3 +22,6 @@ whatsapp:
 
 scheduler:
   dias_vencimiento: 30
+
+server:
+  port: 5000
