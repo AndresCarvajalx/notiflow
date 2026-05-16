@@ -1,7 +1,10 @@
 package main
 
 import (
+	"flag"
+
 	"github.com/AndresCarvajalx/notiflow/config"
+	"github.com/AndresCarvajalx/notiflow/dashboard"
 	"github.com/AndresCarvajalx/notiflow/database"
 	"github.com/AndresCarvajalx/notiflow/license"
 	"github.com/AndresCarvajalx/notiflow/logger"
@@ -11,6 +14,9 @@ import (
 )
 
 func main() {
+	runNotifier := flag.Bool("run", false, "Run notification worker")
+	flag.Parse()
+
 	godotenv.Load()
 
 	logger.Init()
@@ -44,7 +50,14 @@ func main() {
 		logger.L.Sugar().Fatalf("Error loading config: %v", err.Error())
 	}
 
-	if err := notifier.Run(); err != nil {
-		logger.L.Sugar().Fatalf("Error running notifier: %v", err.Error())
+	if *runNotifier {
+		if err := notifier.Run(); err != nil {
+			logger.L.Sugar().Fatalf("Error running notifier: %v", err.Error())
+		}
+		return
 	}
+
+	port := config.Get().Server.Port
+	dashboard.Init(db)
+	dashboard.StartServer(port)
 }
