@@ -53,6 +53,7 @@ func Run() error {
 
 		_ = database.CreateNotification(
 			client.Phone,
+			client.Placa,
 			client.Name,
 			client.TipoTransaccion,
 			client.Value,
