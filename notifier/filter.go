@@ -15,13 +15,13 @@ func FilterClients(clients []model.Client, days int) ([]model.Client, error) {
 			continue
 		}
 
-		notifiedToday, err := database.WasNotifiedToday(client.Phone)
+		recentlyNotified, err := database.WasRecentlyNotified(client.Phone, client.Placa, days)
 		if err != nil {
 			return nil, err
 		}
 
-		if notifiedToday {
-			logger.L.Sugar().Infof("Omitido (ya notificado hoy): %s", client.Name)
+		if recentlyNotified {
+			logger.L.Sugar().Infof("Omitido (notificado en los últimos %d días): %s", days, client.Name)
 			continue
 		}
 
