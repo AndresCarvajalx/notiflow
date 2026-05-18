@@ -1,27 +1,23 @@
 excel:
-  path: "C:/Users/andre/Downloads/clientes_prueba.xlsx"
+  path: C:/Users/andre/Downloads/clientes_prueba.xlsx
   header_row: 1
-
 columnas:
-  tipo_transaccion: "TIPO TRANSACCION"
-  cliente: "CLIENTE"
-  placa: "PLACA"
-  valor_actual: "VALOR ACTUAL"
-  porcentaje_interes: "% INTERES"
-  valor_interes_mensual: "VALOR INTERES MENSUAL"
-  vencimiento_interes: "VENCIMIENTO DEL INTERES"
-  dias_corridos: "DIAS CORRIDOS"
-  valor_interes_vencido: "VALOR TOTAL INTERES VENCIDO A HOY"
-  saldo_actual: "SALDO ACTUAL"
-  telefono: "TELEFONO"
-
+  tipo_transaccion: TIPO TRANSACCION
+  cliente: CLIENTE
+  placa: PLACA
+  valor_actual: VALOR ACTUAL
+  porcentaje_interes: '% INTERES'
+  valor_interes_mensual: VALOR INTERES MENSUAL
+  vencimiento_interes: VENCIMIENTO DEL INTERES
+  dias_corridos: DIAS CORRIDOS
+  valor_interes_vencido: VALOR TOTAL INTERES VENCIDO A HOY
+  saldo_actual: SALDO ACTUAL
+  telefono: TELEFONO
 whatsapp:
-  token: "EAANfB26PNGQBRTxQYMslKHZAUzwZAxZAYbdMcpiY7ODWaLscMHWkxTXZCPVYSPuYR0RcZBVXv22t1CSJ2EY3bvzojdlHqnWZClpM5ddRtf1OBeEzLRw5OFlHDRs7fIZABFWICGicbeikW8n630BSZCsGcXRq6ho6DIrXVnqXvZBRdqhtlfNw8mtNotZA4IrkR2ZBZBijAJjPuqtkb0f9Mwe7JELI5ORDZBvAbPTL9MZAFWglqtxvmQ1tNnEODPDXgvvbKpKv31A5TSRZAR50qxQj9em9f2X3wPK"
-  phone_id: "1077709502094473"
-  codigo_pais: "57"
-
+  token: EAANfB26PNGQBRRPYHCLh27mbZBZAZC83Vyq7XeTugSwaLqbprLI2rE4QvnOO40g25t20sN6EnfVa3O45BnZC4BlGZBtcN5ZAQjPBPm6pZAD9mDl5yZBeGJ9VJHPt5vr5HQcqzqHfxsiU0aZCt38uetlZC4SZC5nZBWfzNZCoFUNJWNWZBoXkgIs1rEbQCZBvlRgMSu8lrRsBUPHE8P1n8UuXdSJTGHCgnNdSi49xjY6cmGNHwBzIhasa1P99PZAH31Kb5bQBpb0VFijRCXUIXmz2F4hm5RZBFP0LV
+  phone_id: '1077709502094473'
+  codigo_pais: '57'
 scheduler:
   dias_vencimiento: 30
-
 server:
   port: 5000
