@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS columnas_excel (
 CREATE TABLE IF NOT EXISTS notificaciones (
     id               INTEGER PRIMARY KEY AUTOINCREMENT,
     telefono         TEXT NOT NULL,
+	placa            TEXT,
     nombre           TEXT,
     descripcion      TEXT,
     valor            REAL,
@@ -76,17 +77,17 @@ func Init(d *sql.DB) {
 	logger.L.Info("Database initialized successfully with default schema")
 }
 
-func WasRecentlyNotified(phone string, days int) (bool, error) {
+func WasRecentlyNotified(phone string, placa string, days int) (bool, error) {
 	limit := time.Now().AddDate(0, 0, -days)
-
 	var count int
 	err := db.QueryRow(`
-		SELECT COUNT(*) 
-		FROM notificaciones
-		WHERE telefono = ?
-		  AND estado = 'enviado'
-		  AND fecha_envio > ?
-	`, phone, limit.Format("2006-01-02 15:04:05")).Scan(&count)
+        SELECT COUNT(*) 
+        FROM notificaciones
+        WHERE telefono = ?
+          AND placa = ?
+          AND estado = 'enviado'
+          AND fecha_envio > ?
+    `, phone, placa, limit.Format("2006-01-02 15:04:05")).Scan(&count)
 
 	if err != nil {
 		logger.L.Sugar().Errorf("Error checking notification for %s: %v", phone, err)
@@ -118,6 +119,7 @@ func WasNotifiedToday(phone string) (bool, error) {
 
 func CreateNotification(
 	phone string,
+	placa string,
 	name string,
 	description string,
 	value float64,
@@ -129,10 +131,11 @@ func CreateNotification(
 
 	_, err := db.Exec(`
 		INSERT INTO notificaciones
-		(telefono, nombre, descripcion, valor, dias_vencidos, mensaje_enviado, estado, error_detalle)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+		(telefono, placa,  nombre, descripcion, valor, dias_vencidos, mensaje_enviado, estado, error_detalle)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 	`,
 		phone,
+		placa,
 		name,
 		description,
 		value,
