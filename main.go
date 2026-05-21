@@ -10,15 +10,16 @@ import (
 	"github.com/AndresCarvajalx/notiflow/logger"
 	"github.com/AndresCarvajalx/notiflow/notifier"
 	"github.com/AndresCarvajalx/notiflow/utils"
+	"github.com/AndresCarvajalx/notiflow/wmeow"
 	"github.com/joho/godotenv"
 )
 
 func main() {
 	runNotifier := flag.Bool("run", false, "Run notification worker")
+	useWhatsmeow := flag.Bool("whatsmeow", false, "Usar whatsmeow en vez de WhatsApp API")
 	flag.Parse()
 
 	godotenv.Load()
-
 	logger.Init()
 
 	serial, err := license.GetWindowSerialNumber()
@@ -26,17 +27,11 @@ func main() {
 		utils.ShowDialog("Error obteniendo serial", "Ocurrio un error obteniendo el serial, error: "+err.Error())
 		logger.L.Sugar().Fatal(err.Error())
 	}
-
 	logger.L.Sugar().Infof("Numero de serial:%s", serial)
 
 	active, err := license.ValidateLicense(serial)
-	if err != nil {
-		utils.ShowDialog("Error validando licencia", err.Error())
-	}
-
-	if !active {
-		utils.ShowDialog("Licencia Invalida", "Su licencia expiro, por favor pongase en contacto para renovarla")
-		return
+	if err != nil || !active {
+		utils.ShowDialog("Error", err.Error())
 	}
 
 	db := database.GetConnection()
@@ -51,8 +46,16 @@ func main() {
 	}
 
 	if *runNotifier {
-		if err := notifier.Run(); err != nil {
-			logger.L.Sugar().Fatalf("Error running notifier: %v", err.Error())
+		if *useWhatsmeow {
+			if err := wmeow.Run(); err != nil {
+				utils.ShowDialog("Error notifier wmeow", err.Error())
+				logger.L.Sugar().Fatalf("Error running whatsmeow: %v", err.Error())
+			}
+		} else {
+			if err := notifier.Run(); err != nil {
+				utils.ShowDialog("Error notifier", err.Error())
+				logger.L.Sugar().Fatalf("Error running notifier: %v", err.Error())
+			}
 		}
 		return
 	}
