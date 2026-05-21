@@ -143,11 +143,25 @@ func Run() error {
 	}
 
 	logger.L.Sugar().Infof("Filtrando clientes con mas de %d dias vencidos...", cfg.Scheduler.DiasVencimiento)
-	filtered, err := notifier.FilterClients(clients, cfg.Scheduler.DiasVencimiento)
+	filtered, omissions, err := notifier.FilterClients(clients, cfg.Scheduler.DiasVencimiento)
 	if err != nil {
 		return err
 	}
-	logger.L.Sugar().Infof("Clientes a notificar: %d", len(filtered))
+	logger.L.Sugar().Infof("Clientes a notificar: %d, omitidos: %d", len(filtered), len(omissions))
+
+	for _, om := range omissions {
+		_ = database.CreateNotification(
+			om.Client.Phone,
+			om.Client.Placa,
+			om.Client.Name,
+			om.Client.TipoTransaccion,
+			om.Client.Value,
+			om.Client.DaysOverdue,
+			"",
+			"omitido",
+			&om.Reason,
+		)
+	}
 
 	for _, cl := range filtered {
 		if cl.Placa == "" {
