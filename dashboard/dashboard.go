@@ -29,6 +29,7 @@ type DashboardData struct {
 	WeekCount     int
 	MonthCount    int
 	ErrorCount    int
+	OmittedCount  int
 }
 
 var db *sql.DB
@@ -89,6 +90,7 @@ func DashboardHandler(w http.ResponseWriter, r *http.Request) {
 		WeekCount:     getCount("fecha_envio >= datetime('now', '-7 day')"),
 		MonthCount:    getCount("fecha_envio >= datetime('now', '-30 day')"),
 		ErrorCount:    getCount("estado = 'error'"),
+		OmittedCount:  getCount("estado = 'omitido'"),
 	}
 
 	tmpl := template.Must(template.New("dashboard").Parse(htmlTemplate))
@@ -124,7 +126,7 @@ body{background:#0f172a;color:#e2e8f0;font-family:system-ui,sans-serif;margin:0;
 .page-title{font-size:20px;font-weight:600;color:#f1f5f9;}
 .btn-refresh{background:#1e293b;border:1px solid #334155;color:#94a3b8;padding:6px 14px;border-radius:8px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;text-decoration:none;transition:all 0.15s;}
 .btn-refresh:hover{background:#334155;color:#f1f5f9;}
-.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.5rem;}
+.metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:1.5rem;}
 .metric-card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:1.2rem 1.25rem;}
 .metric-label{font-size:12px;color:#64748b;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
 .metric-value{font-size:30px;font-weight:600;color:#f1f5f9;line-height:1;}
@@ -221,6 +223,11 @@ td.muted{color:#64748b;}
 			<div class="metric-value">{{.ErrorCount}}</div>
 			<div class="metric-sub">totales</div>
 		</div>
+		<div class="metric-card">
+			<div class="metric-label"><i class="ti ti-eye-off"></i> Omitidos</div>
+			<div class="metric-value" style="color:#fcd34d;">{{.OmittedCount}}</div>
+			<div class="metric-sub">totales</div>
+		</div>
 	</div>
 
 	<div class="controls-row">
@@ -286,10 +293,11 @@ function initials(name) {
 	return (name || '').split(' ').slice(0,2).map(w => w[0] || '').join('').toUpperCase() || '?';
 }
 
-function statusBadge(s) {
-	if (s === 'enviado') return '<span class="badge badge-sent"><span class="dot dot-sent"></span>Enviado</span>';
-	if (s === 'error')   return '<span class="badge badge-error"><span class="dot dot-error"></span>Error</span>';
-	return '<span class="badge badge-skip"><span class="dot dot-skip"></span>Omitido</span>';
+function statusBadge(s, detail) {
+	var tip = detail ? ' title="'+detail.replace(/"/g,'&quot;')+'"' : '';
+	if (s === 'enviado') return '<span class="badge badge-sent"'+tip+'><span class="dot dot-sent"></span>Enviado</span>';
+	if (s === 'error')   return '<span class="badge badge-error"'+tip+'><span class="dot dot-error"></span>Error</span>';
+	return '<span class="badge badge-skip"'+tip+'><span class="dot dot-skip"></span>Omitido</span>';
 }
 
 function daysPill(d) {
@@ -359,10 +367,11 @@ function renderTable() {
 
 	tbody.innerHTML = page.map(n => {
 		const av = initials(n.Name);
+		var detail = n.ErrorDetail && n.ErrorDetail.Valid ? n.ErrorDetail.String : null;
 		return '<tr>' +
 			'<td><div class="name-cell"><div class="avatar">'+av+'</div><div><div class="name-main">'+(n.Name||'')+'</div><div class="name-sub">'+(n.Description||'')+'</div></div></div></td>' +
 			'<td class="muted">'+(n.Phone||'')+'</td>' +
-			'<td>'+statusBadge(n.Status)+'</td>' +
+			'<td>'+statusBadge(n.Status, detail)+'</td>' +
 			'<td>'+daysPill(n.DaysOverdue)+'</td>' +
 			'<td class="muted">'+(n.SentAt||'')+'</td>' +
 		'</tr>';
