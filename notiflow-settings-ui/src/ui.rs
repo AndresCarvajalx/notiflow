@@ -1,7 +1,7 @@
-use egui::{RichText, scroll_area::ScrollArea};
+use egui::{scroll_area::ScrollArea, RichText};
 use egui_file_dialog::FileDialog;
 
-use crate::{config, model::Data};
+use crate::{config, model::Data, validator};
 
 #[derive(Default)]
 pub struct NotiflowConfigUI {
@@ -10,6 +10,8 @@ pub struct NotiflowConfigUI {
     save_status: SaveStatus,
     request_focus_message: bool,
     insert_text: Option<String>,
+    show_validation: bool,
+    validation_result: Option<validator::ValidationResult>,
 }
 
 #[derive(Default, Clone, Copy, PartialEq)]
@@ -29,6 +31,8 @@ impl NotiflowConfigUI {
             save_status: SaveStatus::default(),
             request_focus_message: bool::default(),
             insert_text: Some(String::default()),
+            show_validation: false,
+            validation_result: None,
         }
     }
 
@@ -91,11 +95,22 @@ impl eframe::App for NotiflowConfigUI {
             ui.horizontal(|ui| {
                 ui.add_space(12.0);
 
-                let button = egui::Button::new(RichText::new("💾 Guardar").size(12.0))
-                    .fill(egui::Color32::from_rgb(70, 130, 180))
-                    .min_size(egui::Vec2::new(120.0, 32.0));
+                let validate_btn = egui::Button::new(RichText::new("🔍 Validar").size(12.0))
+                    .fill(egui::Color32::from_rgb(40, 100, 60))
+                    .min_size(egui::Vec2::new(100.0, 32.0));
 
-                if ui.add(button).clicked() {
+                if ui.add(validate_btn).clicked() {
+                    self.validation_result = Some(validator::validate(&self.data));
+                    self.show_validation = true;
+                }
+
+                ui.add_space(8.0);
+
+                let save_btn = egui::Button::new(RichText::new("💾 Guardar").size(12.0))
+                    .fill(egui::Color32::from_rgb(70, 130, 180))
+                    .min_size(egui::Vec2::new(100.0, 32.0));
+
+                if ui.add(save_btn).clicked() {
                     self.on_save();
                 }
 
@@ -364,5 +379,36 @@ impl eframe::App for NotiflowConfigUI {
                     });
                 });
         });
+
+        if self.show_validation {
+            let result = self.validation_result.as_ref().unwrap();
+            let summary = result.summary();
+
+            egui::Window::new("Resultado de Validación")
+                .id(egui::Id::new("validation_window"))
+                .resizable(false)
+                .collapsible(false)
+                .anchor(egui::Align2::CENTER_CENTER, [0.0, 0.0])
+                .default_size([480.0, 400.0])
+                .show(ui.ctx(), |ui| {
+                    egui::ScrollArea::vertical().show(ui, |ui| {
+                        ui.label(
+                            RichText::new(&summary)
+                                .size(12.0)
+                                .family(egui::FontFamily::Monospace),
+                        );
+                    });
+                    ui.add_space(12.0);
+                    if ui
+                        .button(
+                            RichText::new("Cerrar")
+                                .size(13.0),
+                        )
+                        .clicked()
+                    {
+                        self.show_validation = false;
+                    }
+                });
+        }
     }
 }
