@@ -9,3 +9,4 @@ egui = "0.34.2"
 egui-file-dialog = "0.13.0"
 serde = { version = "1", features = ["derive"] }
 serde_yml = "0.0.12"
+calamine = "0.24"
