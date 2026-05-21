@@ -23,15 +23,27 @@ func Run() error {
 	}
 
 	logger.L.Sugar().Infof("Filtrando clientes con mas de %d dias vencidos...", cfg.Scheduler.DiasVencimiento)
-	filtered, err := FilterClients(clients, cfg.Scheduler.DiasVencimiento)
+	filtered, omissions, err := FilterClients(clients, cfg.Scheduler.DiasVencimiento)
 	if err != nil {
 		return err
 	}
-	logger.L.Sugar().Infof("Clientes a notificar: %d", len(filtered))
+	logger.L.Sugar().Infof("Clientes a notificar: %d, omitidos: %d", len(filtered), len(omissions))
+
+	for _, om := range omissions {
+		_ = database.CreateNotification(
+			om.Client.Phone,
+			om.Client.Placa,
+			om.Client.Name,
+			om.Client.TipoTransaccion,
+			om.Client.Value,
+			om.Client.DaysOverdue,
+			"",
+			"omitido",
+			&om.Reason,
+		)
+	}
 
 	for _, client := range filtered {
-		message := "Hola, buen día. Te escribimos para recordar que actualmente tienes una mora pendiente de *{{2}}* dias con nosotros referente a la placa *{{1}}* Agradecemos realizar el pago lo antes posible para evitar reportes negativos o posibles inconvenientes jurídicos derivados del incumplimiento. Si ya realizaste el pago, por favor envíanos el soporte para actualizar el estado de tu cuenta. Quedamos atentos. Gracias."
-
 		err := whatsapp.Send(
 			cfg.Whatsapp.Token,
 			cfg.Whatsapp.PhoneID,
@@ -58,7 +70,7 @@ func Run() error {
 			client.TipoTransaccion,
 			client.Value,
 			client.DaysOverdue,
-			message,
+			"",
 			status,
 			errorDetail,
 		)
