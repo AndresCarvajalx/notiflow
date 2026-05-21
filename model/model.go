@@ -1,5 +1,10 @@
 package model
 
+type Omission struct {
+	Client Client
+	Reason string
+}
+
 type Client struct {
 	TipoTransaccion     string
 	Name                string
