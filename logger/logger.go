@@ -11,6 +11,8 @@ import (
 var L *zap.Logger
 
 func Init() {
+	os.MkdirAll("./logs", 0755)
+
 	encoderConfig := zap.NewProductionEncoderConfig()
 	encoderConfig.TimeKey = "time"
 	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
