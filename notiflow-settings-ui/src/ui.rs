@@ -8,6 +8,8 @@ pub struct NotiflowConfigUI {
     data: Data,
     file_dialog: FileDialog,
     save_status: SaveStatus,
+    request_focus_message: bool,
+    insert_text: Option<String>,
 }
 
 #[derive(Default, Clone, Copy, PartialEq)]
@@ -23,8 +25,10 @@ impl NotiflowConfigUI {
     pub fn new(_: &eframe::CreationContext<'_>, data: Data) -> Self {
         Self {
             data,
-            file_dialog: FileDialog::new(),
-            save_status: SaveStatus::None,
+            file_dialog: FileDialog::default(),
+            save_status: SaveStatus::default(),
+            request_focus_message: bool::default(),
+            insert_text: Some(String::default()),
         }
     }
 
@@ -43,7 +47,11 @@ impl NotiflowConfigUI {
     fn section_title(ui: &mut egui::Ui, title: &str) {
         ui.vertical(|ui| {
             ui.add_space(8.0);
-            ui.heading(RichText::new(title).size(18.0).color(egui::Color32::from_rgb(70, 130, 180)));
+            ui.heading(
+                RichText::new(title)
+                    .size(18.0)
+                    .color(egui::Color32::from_rgb(70, 130, 180)),
+            );
             ui.separator();
             ui.add_space(4.0);
         });
@@ -68,7 +76,9 @@ impl eframe::App for NotiflowConfigUI {
             ui.add_space(8.0);
             ui.horizontal(|ui| {
                 ui.add_space(12.0);
-                let title = RichText::new("🔩 CONFIGURACIÓN NOTIFLOW").size(24.0).strong();
+                let title = RichText::new("🔩 CONFIGURACIÓN NOTIFLOW")
+                    .size(24.0)
+                    .strong();
                 ui.heading(title);
             });
             ui.add_space(8.0);
@@ -80,21 +90,29 @@ impl eframe::App for NotiflowConfigUI {
             ui.add_space(6.0);
             ui.horizontal(|ui| {
                 ui.add_space(12.0);
-                
+
                 let button = egui::Button::new(RichText::new("💾 Guardar").size(12.0))
                     .fill(egui::Color32::from_rgb(70, 130, 180))
                     .min_size(egui::Vec2::new(120.0, 32.0));
-                    
+
                 if ui.add(button).clicked() {
                     self.on_save();
                 }
 
                 match self.save_status {
                     SaveStatus::Success => {
-                        ui.label(RichText::new("✅ Guardado exitosamente").size(11.0).color(egui::Color32::GREEN));
+                        ui.label(
+                            RichText::new("✅ Guardado exitosamente")
+                                .size(11.0)
+                                .color(egui::Color32::GREEN),
+                        );
                     }
                     SaveStatus::Error => {
-                        ui.label(RichText::new("❌ Error al guardar").size(11.0).color(egui::Color32::RED));
+                        ui.label(
+                            RichText::new("❌ Error al guardar")
+                                .size(11.0)
+                                .color(egui::Color32::RED),
+                        );
                     }
                     _ => {}
                 }
@@ -108,23 +126,31 @@ impl eframe::App for NotiflowConfigUI {
                 .show(ui, |ui| {
                     ui.vertical_centered(|ui| {
                         ui.add_space(8.0);
-                        
+
                         ui.horizontal(|ui| {
                             ui.add_space(20.0);
-                            
+
                             ui.vertical(|ui| {
                                 ui.set_max_width(500.0);
 
                                 NotiflowConfigUI::section_title(ui, "📊 Excel");
                                 ui.add_space(2.0);
 
-                                NotiflowConfigUI::create_labeled_row(ui, "Ruta del archivo:", |ui| {
-                                    if ui.button("📁").on_hover_text("Seleccionar archivo").clicked() {
-                                        self.file_dialog.pick_file();
-                                    }
-                                    ui.text_edit_singleline(&mut self.data.excel.path)
-                                        .on_hover_text("Ruta del archivo Excel");
-                                });
+                                NotiflowConfigUI::create_labeled_row(
+                                    ui,
+                                    "Ruta del archivo:",
+                                    |ui| {
+                                        if ui
+                                            .button("📁")
+                                            .on_hover_text("Seleccionar archivo")
+                                            .clicked()
+                                        {
+                                            self.file_dialog.pick_file();
+                                        }
+                                        ui.text_edit_singleline(&mut self.data.excel.path)
+                                            .on_hover_text("Ruta del archivo Excel");
+                                    },
+                                );
 
                                 self.file_dialog.update(ui.ctx());
 
@@ -132,13 +158,24 @@ impl eframe::App for NotiflowConfigUI {
                                     self.data.excel.path = path.display().to_string();
                                 }
 
-                                NotiflowConfigUI::create_labeled_row(ui, "Fila de encabezado:", |ui| {
-                                    ui.add(egui::Slider::new(&mut self.data.excel.header_row, 0..=20)
-                                        .show_value(true)
-                                        .fixed_decimals(0)
-                                        .max_decimals(0))
-                                        .on_hover_text("Número de fila donde inician los encabezados");
-                                });
+                                NotiflowConfigUI::create_labeled_row(
+                                    ui,
+                                    "Fila de encabezado:",
+                                    |ui| {
+                                        ui.add(
+                                            egui::Slider::new(
+                                                &mut self.data.excel.header_row,
+                                                0..=20,
+                                            )
+                                            .show_value(true)
+                                            .fixed_decimals(0)
+                                            .max_decimals(0),
+                                        )
+                                        .on_hover_text(
+                                            "Número de fila donde inician los encabezados",
+                                        );
+                                    },
+                                );
 
                                 ui.add_space(12.0);
 
@@ -149,11 +186,23 @@ impl eframe::App for NotiflowConfigUI {
                                     ("Cliente", &mut self.data.columnas.cliente),
                                     ("Placa", &mut self.data.columnas.placa),
                                     ("Valor Actual", &mut self.data.columnas.valor_actual),
-                                    ("Porcentaje Interés", &mut self.data.columnas.porcentaje_interes),
-                                    ("Valor Interés Mensual", &mut self.data.columnas.valor_interes_mensual),
-                                    ("Vencimiento Interés", &mut self.data.columnas.vencimiento_interes),
+                                    (
+                                        "Porcentaje Interés",
+                                        &mut self.data.columnas.porcentaje_interes,
+                                    ),
+                                    (
+                                        "Valor Interés Mensual",
+                                        &mut self.data.columnas.valor_interes_mensual,
+                                    ),
+                                    (
+                                        "Vencimiento Interés",
+                                        &mut self.data.columnas.vencimiento_interes,
+                                    ),
                                     ("Días Corridos", &mut self.data.columnas.dias_corridos),
-                                    ("Valor Interés Vencido", &mut self.data.columnas.valor_interes_vencido),
+                                    (
+                                        "Valor Interés Vencido",
+                                        &mut self.data.columnas.valor_interes_vencido,
+                                    ),
                                     ("Saldo Actual", &mut self.data.columnas.saldo_actual),
                                     ("Teléfono", &mut self.data.columnas.telefono),
                                 ];
@@ -182,36 +231,134 @@ impl eframe::App for NotiflowConfigUI {
                                     ui.add_space(1.0);
                                 }
 
+                                ui.add_space(6.0);
+
+                                let mensaje_id = egui::Id::new("mensaje_personalizado");
+                                ui.horizontal(|ui| {
+                                    ui.label(RichText::new("Mensaje Personalizado").size(12.0));
+                                    ui.with_layout(
+                                        egui::Layout::right_to_left(egui::Align::Center),
+                                        |ui| {
+                                            ui.menu_button("➕", |ui| {
+                                                ui.set_min_width(160.0);
+                                                ui.label(
+                                                    RichText::new("Variables disponibles")
+                                                        .size(11.0)
+                                                        .color(egui::Color32::GRAY),
+                                                );
+                                                ui.separator();
+                                                let variables = [
+                                                    ("{cliente}", "Nombre del cliente"),
+                                                    ("{placa}", "Placa del vehículo"),
+                                                    ("{dias}", "Días vencidos"),
+                                                    ("{tipo}", "Tipo de transacción"),
+                                                    ("{valor}", "Valor actual"),
+                                                    ("{saldo}", "Saldo actual"),
+                                                ];
+                                                for (var, desc) in variables {
+                                                    if ui
+                                                        .button(
+                                                            RichText::new(format!(
+                                                                "{} — {}",
+                                                                var, desc
+                                                            ))
+                                                            .size(11.0),
+                                                        )
+                                                        .clicked()
+                                                    {
+                                                        self.insert_text = Some(var.to_string());
+                                                        self.request_focus_message = true;
+                                                        ui.close();
+                                                    }
+                                                }
+                                            });
+                                        },
+                                    );
+                                });
+
+                                ui.add_space(2.0);
+
+                                let mut state = egui::TextEdit::load_state(ui.ctx(), mensaje_id)
+                                    .unwrap_or_default();
+
+                                if let Some(text) = self.insert_text.take() {
+                                    if let Some(range) = state.cursor.char_range() {
+                                        let pos = range.primary.index;
+                                        let byte_pos = self
+                                            .data
+                                            .whatsapp
+                                            .mensaje
+                                            .char_indices()
+                                            .nth(pos)
+                                            .map(|(i, _)| i)
+                                            .unwrap_or(self.data.whatsapp.mensaje.len());
+
+                                        self.data.whatsapp.mensaje.insert_str(byte_pos, &text);
+
+                                        let new_pos = pos + text.chars().count();
+                                        let new_cursor = egui::text::CCursorRange::one(
+                                            egui::text::CCursor::new(new_pos),
+                                        );
+                                        state.cursor.set_char_range(Some(new_cursor));
+                                    } else {
+                                        self.data.whatsapp.mensaje.push_str(&text);
+                                    }
+                                    egui::TextEdit::store_state(ui.ctx(), mensaje_id, state);
+                                }
+
+                                let out =
+                                    egui::TextEdit::multiline(&mut self.data.whatsapp.mensaje)
+                                        .id(mensaje_id)
+                                        .desired_rows(5)
+                                        .desired_width(f32::INFINITY)
+                                        .show(ui);
+
+                                if self.request_focus_message {
+                                    ui.ctx().memory_mut(|mem| mem.request_focus(mensaje_id));
+                                    out.response.request_focus();
+                                    self.request_focus_message = false;
+                                }
+
                                 ui.add_space(12.0);
 
                                 NotiflowConfigUI::section_title(ui, "⏰ Programador");
 
-                                NotiflowConfigUI::create_labeled_row(ui, "Días de vencimiento:", |ui| {
-                                    ui.add(egui::Slider::new(
-                                        &mut self.data.scheduler.dias_vencimiento,
-                                        0..=60,
-                                    )
-                                    .show_value(true)
-                                    .fixed_decimals(0)
-                                    .max_decimals(0))
+                                NotiflowConfigUI::create_labeled_row(
+                                    ui,
+                                    "Días de vencimiento:",
+                                    |ui| {
+                                        ui.add_enabled(
+                                            false,
+                                            egui::Slider::new(
+                                                &mut self.data.scheduler.dias_vencimiento,
+                                                0..=60,
+                                            )
+                                            .show_value(true)
+                                            .fixed_decimals(0)
+                                            .max_decimals(0),
+                                        )
                                         .on_hover_text("Días para considerar como vencido");
-                                });
+                                    },
+                                );
 
                                 ui.add_space(12.0);
 
                                 NotiflowConfigUI::section_title(ui, "🖥️ Servidor");
 
                                 NotiflowConfigUI::create_labeled_row(ui, "Puerto:", |ui| {
-                                    ui.add(egui::Slider::new(&mut self.data.server.port, 1000..=9999)
-                                        .show_value(true)
-                                        .fixed_decimals(0)
-                                        .max_decimals(0))
-                                        .on_hover_text("Puerto en el que correrá el servidor");
+                                    ui.add_enabled(
+                                        false,
+                                        egui::Slider::new(&mut self.data.server.port, 1000..=9999)
+                                            .show_value(true)
+                                            .fixed_decimals(0)
+                                            .max_decimals(0),
+                                    )
+                                    .on_hover_text("Puerto en el que correrá el servidor");
                                 });
 
                                 ui.add_space(20.0);
                             });
-                            
+
                             ui.add_space(20.0);
                         });
                     });
