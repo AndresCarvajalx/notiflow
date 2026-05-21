@@ -5,6 +5,7 @@ use eframe::egui;
 mod config;
 mod model;
 mod ui;
+mod validator;
 use crate::ui::NotiflowConfigUI;
 
 fn main() {
