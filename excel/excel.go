@@ -82,24 +82,24 @@ func ReadClients(path string) ([]model.Client, error) {
 			continue
 		}
 
-		name := getCell(row, idxCliente)
-		phone := CleanPhone(getCell(row, idxTel))
+		name := GetCell(row, idxCliente)
+		phone := CleanPhone(GetCell(row, idxTel))
 
 		if name == "" || phone == "" {
 			continue
 		}
 
 		client := model.Client{
-			TipoTransaccion:     getCell(row, idxTipo),
+			TipoTransaccion:     GetCell(row, idxTipo),
 			Name:                name,
-			Placa:               getCell(row, idxPlaca),
-			Value:               parseFloat(getCell(row, idxValor)),
-			PorcentajeInteres:   parseFloat(getCell(row, idxPct)),
-			ValorInteresMensual: parseFloat(getCell(row, idxIntMens)),
-			VencimientoInteres:  getCell(row, idxVenc),
-			DaysOverdue:         parseInt(getCell(row, idxDias)),
-			ValorInteresVencido: parseFloat(getCell(row, idxIntVenc)),
-			SaldoActual:         parseFloat(getCell(row, idxSaldo)),
+			Placa:               GetCell(row, idxPlaca),
+			Value:               parseFloat(GetCell(row, idxValor)),
+			PorcentajeInteres:   parseFloat(GetCell(row, idxPct)),
+			ValorInteresMensual: parseFloat(GetCell(row, idxIntMens)),
+			VencimientoInteres:  GetCell(row, idxVenc),
+			DaysOverdue:         parseInt(GetCell(row, idxDias)),
+			ValorInteresVencido: parseFloat(GetCell(row, idxIntVenc)),
+			SaldoActual:         parseFloat(GetCell(row, idxSaldo)),
 			Phone:               phone,
 		}
 
@@ -128,7 +128,7 @@ func normalize(s string) string {
 	return strings.ToLower(strings.TrimSpace(s))
 }
 
-func getCell(row []string, idx int) string {
+func GetCell(row []string, idx int) string {
 	if idx < 0 || idx >= len(row) {
 		return ""
 	}
