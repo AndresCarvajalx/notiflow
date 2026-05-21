@@ -34,7 +34,8 @@ pub struct Columnas {
 pub struct WhatsApp {
     pub token: String,
     pub phone_id: String,
-    pub codigo_pais: String,  // <-- coincide con el yml
+    pub codigo_pais: String,
+    pub mensaje: String,
 }
 
 #[derive(Default, Serialize, Deserialize)]
