@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
+	"path/filepath"
 
 	"github.com/AndresCarvajalx/notiflow/config"
 	"github.com/AndresCarvajalx/notiflow/dashboard"
@@ -18,11 +20,24 @@ import (
 )
 
 func main() {
+	godotenv.Load()
+
+	exePath, err := os.Executable()
+	if err == nil {
+		exeDir := filepath.Dir(exePath)
+		if _, err := os.Stat(filepath.Join(exeDir, "config.yml")); err == nil {
+			os.Chdir(exeDir)
+			godotenv.Load(filepath.Join(exeDir, ".env"))
+		}
+	}
+
 	runNotifier := flag.Bool("run", false, "Ejecutar el worker de notificaciones")
 	useWhatsmeow := flag.Bool("whatsmeow", false, "Usar whatsmeow en vez de WhatsApp API")
 	validate := flag.Bool("validate", false, "Validar configuración y archivo Excel")
 	installSchedule := flag.Bool("install-schedule", false, "Instalar tarea programada diaria (Task Scheduler)")
 	removeSchedule := flag.Bool("remove-schedule", false, "Eliminar tarea programada")
+	installDashboard := flag.Bool("install-dashboard", false, "Agregar dashboard al inicio de Windows")
+	removeDashboard := flag.Bool("remove-dashboard", false, "Quitar dashboard del inicio de Windows")
 
 	flag.Usage = func() {
 		fmt.Println(`Notiflow - Sistema de notificaciones WhatsApp
@@ -42,24 +57,30 @@ FLAGS:
   --validate                Valida que el Excel y la configuración sean correctos
                             sin enviar notificaciones.
 
-  --install-schedule        Instala una tarea programada diaria a las 09:00.
+  --install-schedule        Instala tarea programada diaria a las 09:00.
                             Opcional: combinar con --whatsmeow.
 
   --remove-schedule         Elimina la tarea programada instalada.
 
-EJEMPLOS:
-  notiflow                          Inicia el dashboard web (http://localhost:<PUERTO ESPECIFICADO>)
+  --install-dashboard       Agrega el dashboard al inicio de Windows
+                            (se inicia automaticamente al iniciar sesion).
+
+  --remove-dashboard        Quita el dashboard del inicio de Windows.
+
+ EJEMPLOS:
+  notiflow                          Inicia el dashboard web
   notiflow --run                    Ejecuta notificaciones via WhatsApp API
   notiflow --run --whatsmeow        Ejecuta notificaciones via WhatsApp Web
-  notiflow --validate               Valida Excel y configuración
+  notiflow --validate               Valida Excel y configuracion
   notiflow --install-schedule       Instala tarea diaria con API de Meta
-  notiflow --install-schedule --whatsmeow   Instala tarea diaria con WhatsApp Web
-  notiflow --remove-schedule        Desinstala la tarea programada`)
+  notiflow --install-schedule --whatsmeow   Instala tarea diaria con WhatsApp personal
+  notiflow --remove-schedule        Desinstala la tarea programada
+  notiflow --install-dashboard      Agrega dashboard al inicio de Windows
+  notiflow --remove-dashboard       Quita dashboard del inicio de Windows`)
 	}
 
 	flag.Parse()
 
-	godotenv.Load()
 	logger.Init()
 
 	if *installSchedule {
@@ -68,6 +89,14 @@ EJEMPLOS:
 	}
 	if *removeSchedule {
 		scheduler.Remove()
+		return
+	}
+	if *installDashboard {
+		scheduler.InstallDashboard()
+		return
+	}
+	if *removeDashboard {
+		scheduler.RemoveDashboard()
 		return
 	}
 
@@ -79,9 +108,15 @@ EJEMPLOS:
 	logger.L.Sugar().Infof("Numero de serial:%s", serial)
 
 	active, err := license.ValidateLicense(serial)
-	if err != nil || !active {
+	if err != nil {
 		utils.ShowDialog("Error", err.Error())
+		logger.L.Sugar().Fatal(err.Error())
 	}
+	if !active {
+		utils.ShowDialog("Error", "Error verifique su conexion a internet, de lo contrario pongase en contacto")
+		logger.L.Sugar().Fatal("Licencia no válida o expirada")
+	}
+	logger.L.Sugar().Infof("Licencia: %s", active)
 
 	db := database.GetConnection()
 	database.Init(db)
