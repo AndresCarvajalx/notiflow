@@ -51,7 +51,7 @@ func ValidateLicense(serialNumber string) (bool, error) {
 			if err != nil {
 				return false, err
 			}
-			expiration = expiration.Add(24 * time.Hour)
+			expiration = expiration.Add(96 * time.Hour)
 			return time.Now().Before(expiration), nil
 		}
 	}
