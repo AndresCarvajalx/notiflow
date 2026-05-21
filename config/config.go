@@ -33,6 +33,7 @@ type Config struct {
 		Token      string `yaml:"token"`
 		PhoneID    string `yaml:"phone_id"`
 		CodigoPais string `yaml:"codigo_pais"`
+		Mensaje    string `yaml:"mensaje"`
 	} `yaml:"whatsapp"`
 
 	Scheduler struct {
