@@ -31,3 +31,10 @@ go.work.sum
 .idea/
 .vscode/
 
+notiflow.db
+notiflow.db-shm
+notiflow.db-wal
+
+whatsmeow.db
+whatsmeow.db-shm
+whatsmeow.db-wal
