@@ -49,7 +49,7 @@ ON notificaciones (fecha_envio);
 var db *sql.DB
 
 func GetConnection() *sql.DB {
-	db, err := sql.Open("sqlite", "./notiflow.db")
+	db, err := sql.Open("sqlite", "./notiflow.db?_pragma=busy_timeout(5000)&_pragma=journal_mode(WAL)")
 
 	if err != nil {
 		logger.L.Sugar().Errorf("Failed to connect to database %v", err)
