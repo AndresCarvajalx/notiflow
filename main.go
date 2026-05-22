@@ -51,15 +51,35 @@ func main() {
 		}
 	}
 
-	schedulerOnly := false
+	noLock := false
 	for _, a := range os.Args[1:] {
 		if a == "--install-schedule" || a == "--remove-schedule" ||
-			a == "--install-dashboard" || a == "--remove-dashboard" {
-			schedulerOnly = true
+			a == "--install-dashboard" || a == "--remove-dashboard" || a == "--help" || a == "-h" {
+			noLock = true
 			break
 		}
 	}
-	if !schedulerOnly {
+
+	for _, a := range os.Args[1:] {
+		if a == "--verbose" {
+			k := syscall.NewLazyDLL("kernel32.dll")
+			ret, _, _ := k.NewProc("AttachConsole").Call(uintptr(0xFFFFFFFF))
+			if ret == 0 {
+				k.NewProc("AllocConsole").Call()
+			}
+			hOut, _, _ := k.NewProc("GetStdHandle").Call(uintptr(0xFFFFFFF5))
+			if hOut != 0 && hOut != 0xFFFFFFFF {
+				os.Stdout = os.NewFile(hOut, "stdout")
+			}
+			hErr, _, _ := k.NewProc("GetStdHandle").Call(uintptr(0xFFFFFFF4))
+			if hErr != 0 && hErr != 0xFFFFFFFF {
+				os.Stderr = os.NewFile(hErr, "stderr")
+			}
+			break
+		}
+	}
+
+	if !noLock {
 		release, err := acquireLock()
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
@@ -76,7 +96,7 @@ func main() {
 	removeSchedule := flag.Bool("remove-schedule", false, "Eliminar tarea programada")
 	installDashboard := flag.Bool("install-dashboard", false, "Agregar dashboard al inicio de Windows")
 	removeDashboard := flag.Bool("remove-dashboard", false, "Quitar dashboard del inicio de Windows")
-	verbose := flag.Bool("verbose", false, "Mostrar logs en consola")
+	flag.Bool("verbose", false, "Mostrar logs en consola")
 
 	flag.Usage = func() {
 		fmt.Println(`Notiflow - Sistema de notificaciones WhatsApp
@@ -121,27 +141,6 @@ FLAGS:
 	}
 
 	flag.Parse()
-
-	if *verbose {
-		kernel32 := syscall.NewLazyDLL("kernel32.dll")
-		attachConsole := kernel32.NewProc("AttachConsole")
-		allocConsole := kernel32.NewProc("AllocConsole")
-		getStdHandle := kernel32.NewProc("GetStdHandle")
-
-		ret, _, _ := attachConsole.Call(uintptr(0xFFFFFFFF))
-		if ret == 0 {
-			allocConsole.Call()
-		}
-
-		hOut, _, _ := getStdHandle.Call(uintptr(0xFFFFFFF5))
-		if hOut != 0 && hOut != 0xFFFFFFFF {
-			os.Stdout = os.NewFile(hOut, "stdout")
-		}
-		hErr, _, _ := getStdHandle.Call(uintptr(0xFFFFFFF4))
-		if hErr != 0 && hErr != 0xFFFFFFFF {
-			os.Stderr = os.NewFile(hErr, "stderr")
-		}
-	}
 
 	logger.Init()
 
