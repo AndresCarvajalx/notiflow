@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"os"
@@ -129,6 +130,12 @@ FLAGS:
 		logger.L.Sugar().Fatal(err.Error())
 	}
 	logger.L.Sugar().Infof("Numero de serial:%s", serial)
+
+	if err := utils.WaitForInternet(context.Background()); err != nil {
+		logger.L.Sugar().Infof("Error: %v", err.Error())
+	} else {
+		logger.L.Sugar().Info("Conexion a internet establecida")
+	}
 
 	active, err := license.ValidateLicense(serial)
 	if err != nil {
