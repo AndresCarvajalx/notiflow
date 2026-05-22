@@ -108,14 +108,21 @@ func connect() error {
 			return fmt.Errorf("error generando imagen QR: %w", err)
 		}
 
-		if err := utils.ShowQRDialog(png, "Notiflow - Escanea el QR"); err != nil {
+		closeQR, err := utils.ShowQRDialog(png, "Notiflow - Escanea el QR")
+		if err != nil {
 			logger.L.Sugar().Warnf("Error mostrando dialogo QR: %v", err)
 		}
 
 		select {
 		case <-scanned:
+			if closeQR != nil {
+				closeQR()
+			}
 			logger.L.Sugar().Info("QR escaneado correctamente")
-		case <-time.After(10 * time.Second):
+		case <-time.After(2 * time.Minute):
+			if closeQR != nil {
+				closeQR()
+			}
 			client.Disconnect()
 			return fmt.Errorf("no se detecto el escaneo del QR")
 		}
