@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"syscall"
 
 	"github.com/AndresCarvajalx/notiflow/config"
 	"github.com/AndresCarvajalx/notiflow/dashboard"
@@ -75,6 +76,7 @@ func main() {
 	removeSchedule := flag.Bool("remove-schedule", false, "Eliminar tarea programada")
 	installDashboard := flag.Bool("install-dashboard", false, "Agregar dashboard al inicio de Windows")
 	removeDashboard := flag.Bool("remove-dashboard", false, "Quitar dashboard del inicio de Windows")
+	verbose := flag.Bool("verbose", false, "Mostrar logs en consola")
 
 	flag.Usage = func() {
 		fmt.Println(`Notiflow - Sistema de notificaciones WhatsApp
@@ -104,10 +106,12 @@ FLAGS:
 
   --remove-dashboard        Quita el dashboard del inicio de Windows.
 
+  --verbose                 Muestra los logs en consola (crea una si no hay).
+
  EJEMPLOS:
   notiflow                          Inicia el dashboard web
   notiflow --run                    Ejecuta notificaciones via WhatsApp API
-  notiflow --run --whatsmeow        Ejecuta notificaciones via WhatsApp Web
+  notiflow --run --whatsmeow        Ejecuta notificaciones via WhatsApp Personal
   notiflow --validate               Valida Excel y configuracion
   notiflow --install-schedule       Instala tarea diaria con API de Meta
   notiflow --install-schedule --whatsmeow   Instala tarea diaria con WhatsApp personal
@@ -117,6 +121,27 @@ FLAGS:
 	}
 
 	flag.Parse()
+
+	if *verbose {
+		kernel32 := syscall.NewLazyDLL("kernel32.dll")
+		attachConsole := kernel32.NewProc("AttachConsole")
+		allocConsole := kernel32.NewProc("AllocConsole")
+		getStdHandle := kernel32.NewProc("GetStdHandle")
+
+		ret, _, _ := attachConsole.Call(uintptr(0xFFFFFFFF))
+		if ret == 0 {
+			allocConsole.Call()
+		}
+
+		hOut, _, _ := getStdHandle.Call(uintptr(0xFFFFFFF5))
+		if hOut != 0 && hOut != 0xFFFFFFFF {
+			os.Stdout = os.NewFile(hOut, "stdout")
+		}
+		hErr, _, _ := getStdHandle.Call(uintptr(0xFFFFFFF4))
+		if hErr != 0 && hErr != 0xFFFFFFFF {
+			os.Stderr = os.NewFile(hErr, "stderr")
+		}
+	}
 
 	logger.Init()
 
