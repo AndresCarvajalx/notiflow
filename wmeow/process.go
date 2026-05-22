@@ -22,6 +22,7 @@ import (
 	"github.com/AndresCarvajalx/notiflow/logger"
 	"github.com/AndresCarvajalx/notiflow/model"
 	"github.com/AndresCarvajalx/notiflow/notifier"
+	"github.com/AndresCarvajalx/notiflow/utils"
 )
 
 var client *whatsmeow.Client
@@ -71,24 +72,52 @@ func connect() error {
 			return fmt.Errorf("error conectando: %w", err)
 		}
 
-		scanned := false
-		for evt := range qrChan {
-			if evt.Event == "code" {
-				fmt.Println("\n¡Escanea este código QR con tu WhatsApp!")
-				qr, err := qrcode.New(evt.Code, qrcode.Medium)
-				if err != nil {
-					logger.L.Sugar().Errorf("Error generando QR: %v", err)
-					continue
+		qrCodeCh := make(chan string, 1)
+		scanned := make(chan struct{})
+
+		go func() {
+			for evt := range qrChan {
+				if evt.Event == "code" {
+					select {
+					case qrCodeCh <- evt.Code:
+					default:
+					}
+				} else if evt.Event == "success" {
+					close(scanned)
+					return
 				}
-				fmt.Println(qr.ToSmallString(true))
-			} else if evt.Event == "success" {
-				scanned = true
-				logger.L.Sugar().Info("QR escaneado correctamente")
 			}
-		}
-		if !scanned {
+		}()
+
+		var code string
+		select {
+		case code = <-qrCodeCh:
+		case <-time.After(2 * time.Minute):
 			client.Disconnect()
-			return fmt.Errorf("no se escaneó el QR en el tiempo límite")
+			return fmt.Errorf("no se genero el codigo QR en el tiempo limite")
+		}
+
+		qr, err := qrcode.New(code, qrcode.Medium)
+		if err != nil {
+			client.Disconnect()
+			return fmt.Errorf("error generando QR: %w", err)
+		}
+		png, err := qr.PNG(256)
+		if err != nil {
+			client.Disconnect()
+			return fmt.Errorf("error generando imagen QR: %w", err)
+		}
+
+		if err := utils.ShowQRDialog(png, "Notiflow - Escanea el QR"); err != nil {
+			logger.L.Sugar().Warnf("Error mostrando dialogo QR: %v", err)
+		}
+
+		select {
+		case <-scanned:
+			logger.L.Sugar().Info("QR escaneado correctamente")
+		case <-time.After(10 * time.Second):
+			client.Disconnect()
+			return fmt.Errorf("no se detecto el escaneo del QR")
 		}
 	} else {
 		if err := client.Connect(); err != nil {
