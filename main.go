@@ -20,25 +20,6 @@ import (
 	"github.com/joho/godotenv"
 )
 
-const lockFileName = "notiflow.lock"
-
-func acquireLock() (func(), error) {
-	exe, err := os.Executable()
-	if err != nil {
-		return nil, err
-	}
-	lockPath := filepath.Join(filepath.Dir(exe), lockFileName)
-
-	f, err := os.OpenFile(lockPath, os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0644)
-	if err != nil {
-		return nil, fmt.Errorf("ya hay una instancia de Notiflow ejecutándose (borra %q si no es así)", lockPath)
-	}
-	fmt.Fprintf(f, "%d", os.Getpid())
-	f.Close()
-
-	return func() { os.Remove(lockPath) }, nil
-}
-
 func main() {
 	godotenv.Load()
 
@@ -48,15 +29,6 @@ func main() {
 		if _, err := os.Stat(filepath.Join(exeDir, "config.yml")); err == nil {
 			os.Chdir(exeDir)
 			godotenv.Load(filepath.Join(exeDir, ".env"))
-		}
-	}
-
-	noLock := false
-	for _, a := range os.Args[1:] {
-		if a == "--install-schedule" || a == "--remove-schedule" ||
-			a == "--install-dashboard" || a == "--remove-dashboard" || a == "--help" || a == "-h" {
-			noLock = true
-			break
 		}
 	}
 
@@ -77,16 +49,6 @@ func main() {
 			}
 			break
 		}
-	}
-
-	if !noLock {
-		release, err := acquireLock()
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-			utils.ShowDialog("Notiflow - Bloqueado", err.Error())
-			os.Exit(1)
-		}
-		defer release()
 	}
 
 	runNotifier := flag.Bool("run", false, "Ejecutar el worker de notificaciones")
