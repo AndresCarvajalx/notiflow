@@ -5,18 +5,15 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"strings"
 )
 
-func ShowQRDialog(pngData []byte, title string) error {
+func ShowQRDialog(pngData []byte, title string) (close func(), err error) {
 	tmpDir := os.TempDir()
 	path := filepath.Join(tmpDir, "notiflow_qr.png")
 
 	if err := os.WriteFile(path, pngData, 0644); err != nil {
-		return fmt.Errorf("error escribiendo QR: %w", err)
+		return nil, fmt.Errorf("error escribiendo QR: %w", err)
 	}
-
-	pngPath := strings.ReplaceAll(path, "\\", "\\\\")
 
 	script := fmt.Sprintf(`
 Add-Type -AssemblyName System.Windows.Forms
@@ -43,7 +40,7 @@ $l.Location = New-Object System.Drawing.Point(30, 330)
 $f.Controls.Add($pb)
 $f.Controls.Add($l)
 [void]$f.ShowDialog()
-`, title, pngPath)
+`, title, path)
 
 	cmd := exec.Command("powershell",
 		"-NoProfile",
@@ -51,5 +48,10 @@ $f.Controls.Add($l)
 		"-WindowStyle", "Hidden",
 		"-Command", script,
 	)
-	return cmd.Run()
+
+	if err := cmd.Start(); err != nil {
+		return nil, fmt.Errorf("error iniciando dialogo QR: %w", err)
+	}
+
+	return func() { cmd.Process.Kill() }, nil
 }
