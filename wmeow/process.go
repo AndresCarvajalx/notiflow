@@ -44,23 +44,34 @@ func connect() error {
 	client = whatsmeow.NewClient(deviceStore, clientLog)
 
 	connected := make(chan struct{}, 1)
+	loggedOut := make(chan struct{}, 1)
 
 	client.AddEventHandler(func(evt interface{}) {
 		switch evt.(type) {
 		case *events.Connected:
 			logger.L.Sugar().Info("WhatsApp conectado y listo")
-			connected <- struct{}{}
+			select {
+			case connected <- struct{}{}:
+			default:
+			}
 		case *events.LoggedOut:
 			logger.L.Sugar().Warn("Sesión cerrada, se necesita vincular de nuevo")
+			select {
+			case loggedOut <- struct{}{}:
+			default:
+			}
 		}
 	})
 
 	if client.Store.ID == nil {
-		qrChan, _ := client.GetQRChannel(context.Background())
+		qrCtx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
+		defer cancel()
+		qrChan, _ := client.GetQRChannel(qrCtx)
 		if err := client.Connect(); err != nil {
 			return fmt.Errorf("error conectando: %w", err)
 		}
 
+		scanned := false
 		for evt := range qrChan {
 			if evt.Event == "code" {
 				fmt.Println("\n¡Escanea este código QR con tu WhatsApp!")
@@ -71,8 +82,13 @@ func connect() error {
 				}
 				fmt.Println(qr.ToSmallString(true))
 			} else if evt.Event == "success" {
+				scanned = true
 				logger.L.Sugar().Info("QR escaneado correctamente")
 			}
+		}
+		if !scanned {
+			client.Disconnect()
+			return fmt.Errorf("no se escaneó el QR en el tiempo límite")
 		}
 	} else {
 		if err := client.Connect(); err != nil {
@@ -80,11 +96,13 @@ func connect() error {
 		}
 	}
 
-	// Esperar a que dispare events.Connected o timeout de 15 segundos
 	select {
 	case <-connected:
 		logger.L.Sugar().Info("Listo para enviar mensajes")
-	case <-time.After(15 * time.Second):
+	case <-loggedOut:
+		client.Disconnect()
+		return fmt.Errorf("sesión de WhatsApp cerrada o expirada, ejecuta notiflow en una terminal para escanear el QR de nuevo")
+	case <-time.After(30 * time.Second):
 		return fmt.Errorf("timeout esperando conexión con WhatsApp")
 	}
 
