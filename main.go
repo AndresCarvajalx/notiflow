@@ -42,11 +42,11 @@ func main() {
 			}
 			hOut, _, _ := k.NewProc("GetStdHandle").Call(uintptr(0xFFFFFFF5))
 			if hOut != 0 && hOut != 0xFFFFFFFF {
-				os.Stdout = os.NewFile(hOut, "stdout")
+				os.Stdout = os.NewFile(hOut, "/dev/stdout")
 			}
 			hErr, _, _ := k.NewProc("GetStdHandle").Call(uintptr(0xFFFFFFF4))
 			if hErr != 0 && hErr != 0xFFFFFFFF {
-				os.Stderr = os.NewFile(hErr, "stderr")
+				os.Stderr = os.NewFile(hErr, "/dev/stderr")
 			}
 			break
 		}
