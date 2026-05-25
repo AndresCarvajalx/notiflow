@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
 	"github.com/AndresCarvajalx/notiflow/logger"
@@ -22,25 +23,47 @@ func Install(useWhatsmeow bool) {
 		args += " --whatsmeow"
 	}
 
-	cmd := fmt.Sprintf(`"%s" %s`, exePath, args)
-	schtasks := exec.Command("schtasks",
-		"/create", "/tn", taskName,
-		"/tr", cmd,
-		"/sc", "daily",
-		"/st", "09:00",
-		"/f",
-		"/it",
-	)
+	xml := fmt.Sprintf(`<?xml version="1.0" encoding="UTF-16"?>
+<Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+  <Triggers>
+    <CalendarTrigger>
+      <StartBoundary>2024-01-01T09:00:00</StartBoundary>
+      <ScheduleByDay>
+        <DaysInterval>1</DaysInterval>
+      </ScheduleByDay>
+    </CalendarTrigger>
+  </Triggers>
+  <Settings>
+    <StartWhenAvailable>true</StartWhenAvailable>
+    <ExecutionTimeLimit>PT1H</ExecutionTimeLimit>
+    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+	<DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
+    <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
+  </Settings>
+  <Actions>
+    <Exec>
+      <Command>%s</Command>
+      <Arguments>%s</Arguments>
+    </Exec>
+  </Actions>
+</Task>`, exePath, args)
 
-	output, err := schtasks.CombinedOutput()
+	tmpFile := filepath.Join(os.TempDir(), "notiflow_task.xml")
+	if err := os.WriteFile(tmpFile, []byte(xml), 0644); err != nil {
+		logger.L.Sugar().Fatalf("Error creando XML de tarea: %v", err)
+	}
+	defer os.Remove(tmpFile)
+
+	cmd := exec.Command("schtasks", "/create", "/tn", taskName, "/xml", tmpFile, "/f")
+	output, err := cmd.CombinedOutput()
 	if err != nil {
 		logger.L.Sugar().Fatalf("Error instalando tarea programada:\n%s\n%v", string(output), err)
 	}
 
-	logger.L.Sugar().Infof("Tarea programada '%s' instalada correctamente (diaria a las 09:00)", taskName)
+	logger.L.Sugar().Infof("Tarea programada '%s' instalada correctamente", taskName)
 	fmt.Printf("\nTarea programada '%s' instalada.\n", taskName)
 	fmt.Printf("   Ejecuta: %s %s\n", exePath, args)
-	fmt.Printf("   Horario: Diario a las 09:00\n")
+	fmt.Printf("   Horario: Diario a las 09:00, ejecuta al encender si se paso de la hora\n")
 	fmt.Printf("   Para desinstalar: notiflow --remove-schedule\n\n")
 }
 
@@ -61,7 +84,7 @@ func Remove() {
 	}
 
 	logger.L.Sugar().Infof("Tarea programada '%s' eliminada", taskName)
-	fmt.Printf("\n✅ Tarea programada '%s' eliminada.\n\n", taskName)
+	fmt.Printf("\nTarea programada '%s' eliminada.\n\n", taskName)
 }
 
 func InstallDashboard() {
@@ -84,7 +107,7 @@ func InstallDashboard() {
 	}
 
 	logger.L.Sugar().Infof("Dashboard instalado en inicio de Windows")
-	fmt.Printf("\n✅ Dashboard agregado al inicio de Windows.\n")
+	fmt.Printf("\nDashboard agregado al inicio de Windows.\n")
 	fmt.Printf("   Ejecuta: %s\n", exePath)
 	fmt.Printf("   Se iniciará automáticamente al iniciar sesión.\n")
 	fmt.Printf("   Para quitarlo: notiflow --remove-dashboard\n\n")
@@ -101,14 +124,14 @@ func RemoveDashboard() {
 	if err != nil {
 		if strings.Contains(string(output), "does not exist") || strings.Contains(string(output), "no existe") {
 			logger.L.Sugar().Warnf("El dashboard no está en el inicio de Windows")
-			fmt.Printf("⚠️  El dashboard no está instalado en el inicio.\n")
+			fmt.Printf("El dashboard no está instalado en el inicio.\n")
 			return
 		}
 		logger.L.Sugar().Fatalf("Error quitando dashboard del inicio:\n%s\n%v", string(output), err)
 	}
 
 	logger.L.Sugar().Infof("Dashboard quitado del inicio de Windows")
-	fmt.Printf("\n✅ Dashboard quitado del inicio de Windows.\n\n")
+	fmt.Printf("\nDashboard quitado del inicio de Windows.\n\n")
 }
 
 func Status() bool {
