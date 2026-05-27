@@ -40,13 +40,14 @@ func main() {
 			if ret == 0 {
 				k.NewProc("AllocConsole").Call()
 			}
-			hOut, _, _ := k.NewProc("GetStdHandle").Call(uintptr(0xFFFFFFF5))
-			if hOut != 0 && hOut != 0xFFFFFFFF {
-				os.Stdout = os.NewFile(hOut, "/dev/stdout")
+			stdout, err := os.OpenFile("CONOUT$", os.O_WRONLY, 0)
+			if err == nil {
+				os.Stdout = stdout
 			}
-			hErr, _, _ := k.NewProc("GetStdHandle").Call(uintptr(0xFFFFFFF4))
-			if hErr != 0 && hErr != 0xFFFFFFFF {
-				os.Stderr = os.NewFile(hErr, "/dev/stderr")
+
+			stderr, err := os.OpenFile("CONOUT$", os.O_WRONLY, 0)
+			if err == nil {
+				os.Stderr = stderr
 			}
 			break
 		}
