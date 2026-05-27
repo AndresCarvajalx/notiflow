@@ -25,6 +25,9 @@ func Install(useWhatsmeow bool) {
 
 	xml := fmt.Sprintf(`<?xml version="1.0" encoding="UTF-16"?>
 <Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+  <RegistrationInfo>
+    <Author>Notiflow</Author>
+  </RegistrationInfo>
   <Triggers>
     <CalendarTrigger>
       <StartBoundary>2024-01-01T09:00:00</StartBoundary>
@@ -33,11 +36,17 @@ func Install(useWhatsmeow bool) {
       </ScheduleByDay>
     </CalendarTrigger>
   </Triggers>
+  <Principals>
+    <Principal id="Author">
+      <LogonType>S4U</LogonType>
+      <RunLevel>LeastPrivilege</RunLevel>
+    </Principal>
+  </Principals>
   <Settings>
     <StartWhenAvailable>true</StartWhenAvailable>
     <ExecutionTimeLimit>PT1H</ExecutionTimeLimit>
     <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
-	<DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
+    <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
     <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
   </Settings>
   <Actions>
