@@ -40,6 +40,11 @@ type Config struct {
 		DiasVencimiento int `yaml:"dias_vencimiento"`
 	} `yaml:"scheduler"`
 
+	Throttle struct {
+		DelayMinSegundos int `yaml:"delay_min_segundos"`
+		DelayMaxSegundos int `yaml:"delay_max_segundos"`
+	} `yaml:"throttle"`
+
 	Server struct {
 		Port string `yaml:"port" `
 	} `yaml:"server" `
