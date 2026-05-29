@@ -45,6 +45,14 @@ ON notificaciones (estado);
 
 CREATE INDEX IF NOT EXISTS idx_notificaciones_fecha
 ON notificaciones (fecha_envio);
+
+CREATE TABLE IF NOT EXISTS seguimiento_clientes (
+    telefono      TEXT NOT NULL,
+    placa         TEXT DEFAULT '',
+    ultimo_ciclo  INTEGER DEFAULT 0,
+    updated_at    TEXT DEFAULT (datetime('now')),
+    PRIMARY KEY (telefono, placa)
+);
 `
 var db *sql.DB
 
@@ -95,6 +103,37 @@ func WasRecentlyNotified(phone string, placa string, days int) (bool, error) {
 	}
 
 	return count > 0, nil
+}
+
+func GetUltimoCiclo(phone string, placa string) (int, error) {
+	var ciclo int
+	err := db.QueryRow(`
+		SELECT ultimo_ciclo FROM seguimiento_clientes
+		WHERE telefono = ? AND placa = ?
+	`, phone, placa).Scan(&ciclo)
+	if err == sql.ErrNoRows {
+		return 0, nil
+	}
+	if err != nil {
+		logger.L.Sugar().Errorf("Error obteniendo ultimo ciclo para %s/%s: %v", phone, placa, err)
+		return 0, err
+	}
+	return ciclo, nil
+}
+
+func UpdateUltimoCiclo(phone string, placa string, ciclo int) error {
+	_, err := db.Exec(`
+		INSERT INTO seguimiento_clientes (telefono, placa, ultimo_ciclo, updated_at)
+		VALUES (?, ?, ?, datetime('now'))
+		ON CONFLICT(telefono, placa) DO UPDATE SET
+			ultimo_ciclo = excluded.ultimo_ciclo,
+			updated_at = datetime('now')
+	`, phone, placa, ciclo)
+	if err != nil {
+		logger.L.Sugar().Errorf("Error actualizando ciclo para %s/%s: %v", phone, placa, err)
+		return err
+	}
+	return nil
 }
 
 func WasNotifiedToday(phone string) (bool, error) {
