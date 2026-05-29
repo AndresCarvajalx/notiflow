@@ -30,21 +30,32 @@ func FilterClients(clients []model.Client, days int) ([]model.Client, []model.Om
 			continue
 		}
 
-		recentlyNotified, err := database.WasRecentlyNotified(client.Phone, client.Placa, days)
-		if err != nil {
-			return nil, nil, err
-		}
+		cicloActual := diasVencidos / days
 
-		if recentlyNotified {
-			logger.L.Sugar().Infof("Omitido (notificado en los últimos %d días): %s", days, client.Name)
+		if cicloActual < 1 {
+			logger.L.Sugar().Debugf("Omitido (sin vencer): %s — %d días corridos", client.Name, diasVencidos)
 			omissions = append(omissions, model.Omission{
 				Client: client,
-				Reason: fmt.Sprintf("Ya notificado en los últimos %d días", days),
+				Reason: fmt.Sprintf("Días vencidos (%d) menor al umbral (%d)", diasVencidos, days),
 			})
 			continue
 		}
 
-		logger.L.Sugar().Infof("A notificar: %s — %d días corridos", client.Name, diasVencidos)
+		ultimoCiclo, err := database.GetUltimoCiclo(client.Phone, client.Placa)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		if cicloActual <= ultimoCiclo {
+			logger.L.Sugar().Infof("Omitido (ciclo %d ya notificado): %s — %d días", ultimoCiclo, client.Name, diasVencidos)
+			omissions = append(omissions, model.Omission{
+				Client: client,
+				Reason: fmt.Sprintf("Ya notificado en ciclo %d (días: %d)", ultimoCiclo, diasVencidos),
+			})
+			continue
+		}
+
+		logger.L.Sugar().Infof("A notificar: %s — %d días (ciclo %d)", client.Name, diasVencidos, cicloActual)
 		toNotify = append(toNotify, client)
 	}
 
@@ -83,9 +94,12 @@ func diasDesdeVencimiento(dateStr string) int {
 	return -1
 
 calc:
-	now := time.Now().Truncate(24 * time.Hour)
-	t = t.Truncate(24 * time.Hour)
-	days := int(now.Sub(t).Hours() / 24)
+	now := time.Now()
+	y1, m1, d1 := now.Date()
+	y2, m2, d2 := t.Date()
+	hoy := time.Date(y1, m1, d1, 0, 0, 0, 0, now.Location())
+	venc := time.Date(y2, m2, d2, 0, 0, 0, 0, now.Location())
+	days := int(hoy.Sub(venc).Hours() / 24)
 	if days < 0 {
 		return 0
 	}
