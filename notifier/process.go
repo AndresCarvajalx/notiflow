@@ -1,6 +1,9 @@
 package notifier
 
 import (
+	"math/rand"
+	"time"
+
 	"github.com/AndresCarvajalx/notiflow/logger"
 
 	"github.com/AndresCarvajalx/notiflow/config"
@@ -60,7 +63,11 @@ func Run() error {
 			errorDetail = &msg
 			logger.L.Sugar().Errorf("Error enviando a %s: %v", client.Name, err)
 		} else {
-			logger.L.Sugar().Infof("Enviado a %s (%s)", client.Name, client.Phone)
+			cicloActual := client.DaysOverdue / cfg.Scheduler.DiasVencimiento
+			if err := database.UpdateUltimoCiclo(client.Phone, client.Placa, cicloActual); err != nil {
+				logger.L.Sugar().Errorf("Error actualizando ciclo para %s: %v", client.Name, err)
+			}
+			logger.L.Sugar().Infof("Enviado a %s (%s) — ciclo %d", client.Name, client.Phone, cicloActual)
 		}
 
 		_ = database.CreateNotification(
@@ -74,6 +81,9 @@ func Run() error {
 			status,
 			errorDetail,
 		)
+
+		delay := rand.Intn(cfg.Throttle.DelayMaxSegundos-cfg.Throttle.DelayMinSegundos+1) + cfg.Throttle.DelayMinSegundos
+		time.Sleep(time.Duration(delay) * time.Second)
 	}
 
 	return nil
