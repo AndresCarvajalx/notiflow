@@ -16,10 +16,10 @@ func FilterClients(clients []model.Client, days int) ([]model.Client, []model.Om
 	var omissions []model.Omission
 
 	for _, client := range clients {
-		diasVencidos := diasDesdeVencimiento(client.VencimientoInteres)
-		if diasVencidos < 0 {
-			diasVencidos = client.DaysOverdue
+		if d := diasDesdeVencimiento(client.VencimientoInteres); d >= 0 {
+			client.DaysOverdue = d
 		}
+		diasVencidos := client.DaysOverdue
 
 		if diasVencidos < days {
 			logger.L.Sugar().Debugf("Omitido (sin vencer): %s — %d días corridos", client.Name, diasVencidos)
