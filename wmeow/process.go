@@ -3,6 +3,7 @@ package wmeow
 import (
 	"context"
 	"fmt"
+	"math/rand"
 	"strings"
 	"time"
 
@@ -235,7 +236,11 @@ func Run() error {
 			errorDetail = &msg
 			logger.L.Sugar().Errorf("Error enviando a %s: %v", cl.Name, err)
 		} else {
-			logger.L.Sugar().Infof("Enviado a %s (%s)", cl.Name, cl.Phone)
+			cicloActual := cl.DaysOverdue / cfg.Scheduler.DiasVencimiento
+			if err := database.UpdateUltimoCiclo(cl.Phone, cl.Placa, cicloActual); err != nil {
+				logger.L.Sugar().Errorf("Error actualizando ciclo para %s: %v", cl.Name, err)
+			}
+			logger.L.Sugar().Infof("Enviado a %s (%s) — ciclo %d", cl.Name, cl.Phone, cicloActual)
 		}
 
 		_ = database.CreateNotification(
@@ -250,7 +255,15 @@ func Run() error {
 			errorDetail,
 		)
 
-		time.Sleep(2 * time.Second)
+		if cfg.Throttle.DelayMinSegundos <= 0 {
+			cfg.Throttle.DelayMinSegundos = 5
+		}
+		if cfg.Throttle.DelayMaxSegundos <= cfg.Throttle.DelayMinSegundos {
+			cfg.Throttle.DelayMaxSegundos = cfg.Throttle.DelayMinSegundos + 15
+		}
+
+		delay := rand.Intn(cfg.Throttle.DelayMaxSegundos-cfg.Throttle.DelayMinSegundos+1) + cfg.Throttle.DelayMinSegundos
+		time.Sleep(time.Duration(delay) * time.Second)
 	}
 
 	return nil
